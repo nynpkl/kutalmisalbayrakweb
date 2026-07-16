@@ -43,9 +43,22 @@ function onSubmit() {
           </div>
         </dl>
 
-        <div class="contact__map" aria-hidden="true">
-          <span>Harita yer tutucusu</span>
+        <div class="contact__map">
+          <iframe
+            src="https://maps.google.com/maps?q=41.0956288,29.0538758&z=16&output=embed"
+            title="Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi konumu"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          />
         </div>
+        <a
+          href="https://maps.app.goo.gl/Pj9NxrLY83yANvtGA"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact__map-link link-underline"
+        >
+          Google Haritalar'da aç →
+        </a>
       </div>
 
       <form class="contact__form" @submit.prevent="onSubmit">
@@ -109,13 +122,23 @@ function onSubmit() {
   aspect-ratio: 16 / 9;
   background: var(--color-accent-soft);
   border: 1px solid var(--color-line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-muted);
+  overflow: hidden;
+}
+
+.contact__map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.contact__map-link {
+  display: inline-block;
+  margin-top: 14px;
   font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
+  color: var(--color-accent);
 }
 
 .contact__form {
