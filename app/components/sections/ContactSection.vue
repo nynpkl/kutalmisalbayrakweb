@@ -1,4 +1,23 @@
 <script setup lang="ts">
+const fallback = {
+  eyebrow: 'İletişim',
+  title: 'Randevu ve iletişim bilgileri',
+  lead: 'Muayene ve ameliyat randevuları, görev yaptığı kamu hastanesinin randevu sistemleri üzerinden alınmaktadır.',
+  workplaceName: 'Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi',
+  workplaceDept: 'Ortopedi ve Travmatoloji Kliniği',
+  address: 'Baltalimanı Mah. Rumeli Hisarı Cad. No: 57/1, 34470 Sarıyer / İstanbul',
+  phoneDisplay: '0 (212) 323 70 75',
+  phoneHref: '+902123237075',
+  appointmentNote: 'MHRS (Merkezi Hastane Randevu Sistemi) veya Alo 182 üzerinden de randevu alınabilir.',
+  instagramHandle: '@drkutalmisalbayrak',
+  instagramUrl: 'https://www.instagram.com/drkutalmisalbayrak/',
+  mapEmbedSrc: 'https://maps.google.com/maps?q=41.0956288,29.0538758&z=16&output=embed',
+  mapUrl: 'https://maps.app.goo.gl/Pj9NxrLY83yANvtGA'
+}
+
+const { data } = await useSiteContent()
+const contact = computed(() => ({ ...fallback, ...(data.value?.contact ?? {}) }))
+
 const submitted = ref(false)
 
 function onSubmit() {
@@ -10,34 +29,31 @@ function onSubmit() {
   <section id="iletisim" class="section contact">
     <div class="container contact__grid">
       <div class="contact__info">
-        <p class="eyebrow">İletişim</p>
-        <h2 class="section-title">Randevu ve iletişim bilgileri</h2>
-        <p class="section-lead">
-          Muayene ve ameliyat randevuları, görev yaptığı kamu hastanesinin randevu sistemleri üzerinden
-          alınmaktadır.
-        </p>
+        <p class="eyebrow">{{ contact.eyebrow }}</p>
+        <h2 class="section-title">{{ contact.title }}</h2>
+        <p class="section-lead">{{ contact.lead }}</p>
 
         <dl class="contact__details">
           <div>
             <dt>Görev Yeri</dt>
-            <dd>Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi<br />Ortopedi ve Travmatoloji Kliniği</dd>
+            <dd>{{ contact.workplaceName }}<br />{{ contact.workplaceDept }}</dd>
           </div>
           <div>
             <dt>Adres</dt>
-            <dd>Baltalimanı Mah. Rumeli Hisarı Cad. No: 57/1, 34470 Sarıyer / İstanbul</dd>
+            <dd>{{ contact.address }}</dd>
           </div>
           <div>
             <dt>Randevu Hattı</dt>
             <dd>
-              <a href="tel:+902123237075" class="link-underline">0 (212) 323 70 75</a> ·
-              MHRS (Merkezi Hastane Randevu Sistemi) veya Alo 182 üzerinden de randevu alınabilir.
+              <a :href="`tel:${contact.phoneHref}`" class="link-underline">{{ contact.phoneDisplay }}</a> ·
+              {{ contact.appointmentNote }}
             </dd>
           </div>
           <div>
             <dt>Sosyal Medya</dt>
             <dd>
-              <a href="https://www.instagram.com/drkutalmisalbayrak/" target="_blank" rel="noopener noreferrer" class="link-underline">
-                @drkutalmisalbayrak
+              <a :href="contact.instagramUrl" target="_blank" rel="noopener noreferrer" class="link-underline">
+                {{ contact.instagramHandle }}
               </a>
             </dd>
           </div>
@@ -45,14 +61,14 @@ function onSubmit() {
 
         <div class="contact__map">
           <iframe
-            src="https://maps.google.com/maps?q=41.0956288,29.0538758&z=16&output=embed"
-            title="Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi konumu"
+            :src="contact.mapEmbedSrc"
+            title="Konum haritası"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           />
         </div>
         <a
-          href="https://maps.app.goo.gl/Pj9NxrLY83yANvtGA"
+          :href="contact.mapUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="contact__map-link link-underline"

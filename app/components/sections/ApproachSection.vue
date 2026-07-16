@@ -1,38 +1,43 @@
 <script setup lang="ts">
-const steps = [
-  {
-    title: 'Değerlendirme',
-    text: 'İlk muayenede şikayetiniz, görüntüleme tetkikleriniz (MR/röntgen) birlikte incelenir, sorularınıza zaman ayrılır.'
-  },
-  {
-    title: 'Tedavi Planı',
-    text: 'Konservatif tedavi mi yoksa cerrahi mi gerektiği netleştirilir; alternatif yöntemler açıkça anlatılır.'
-  },
-  {
-    title: 'Ameliyat',
-    text: 'Mümkün olan her durumda minimal invaziv artroskopik teknikler tercih edilerek iyileşme süresi kısaltılır.'
-  },
-  {
-    title: 'Rehabilitasyon',
-    text: 'Fizyoterapi ve kontrollerle desteklenen bir süreçle günlük yaşama ve spora güvenli dönüş hedeflenir.'
-  }
-]
+const fallback = {
+  eyebrow: 'Yaklaşımım',
+  title: 'Şeffaf, sakin ve hasta odaklı bir süreç',
+  lead: 'Cerrahi bir karar genellikle hastanın hayatında endişeyle anılan bir dönemdir. Bu süreci olabildiğince anlaşılır ve öngörülebilir kılmak için her aşamada açık iletişimi önceliklendiriyorum.',
+  steps: [
+    {
+      title: 'Değerlendirme',
+      text: 'İlk muayenede şikayetiniz, görüntüleme tetkikleriniz (MR/röntgen) birlikte incelenir, sorularınıza zaman ayrılır.'
+    },
+    {
+      title: 'Tedavi Planı',
+      text: 'Konservatif tedavi mi yoksa cerrahi mi gerektiği netleştirilir; alternatif yöntemler açıkça anlatılır.'
+    },
+    {
+      title: 'Ameliyat',
+      text: 'Mümkün olan her durumda minimal invaziv artroskopik teknikler tercih edilerek iyileşme süresi kısaltılır.'
+    },
+    {
+      title: 'Rehabilitasyon',
+      text: 'Fizyoterapi ve kontrollerle desteklenen bir süreçle günlük yaşama ve spora güvenli dönüş hedeflenir.'
+    }
+  ]
+}
+
+const { data } = await useSiteContent()
+const approach = computed(() => ({ ...fallback, ...(data.value?.approach ?? {}) }))
 </script>
 
 <template>
   <section id="yaklasim" class="section approach">
     <div class="container approach__grid">
       <div class="approach__intro">
-        <p class="eyebrow">Yaklaşımım</p>
-        <h2 class="section-title">Şeffaf, sakin ve hasta odaklı bir süreç</h2>
-        <p class="section-lead">
-          Cerrahi bir karar genellikle hastanın hayatında endişeyle anılan bir dönemdir. Bu süreci
-          olabildiğince anlaşılır ve öngörülebilir kılmak için her aşamada açık iletişimi önceliklendiriyorum.
-        </p>
+        <p class="eyebrow">{{ approach.eyebrow }}</p>
+        <h2 class="section-title">{{ approach.title }}</h2>
+        <p class="section-lead">{{ approach.lead }}</p>
       </div>
 
       <ol class="approach__steps">
-        <li v-for="(step, index) in steps" :key="step.title" class="approach__step">
+        <li v-for="(step, index) in approach.steps" :key="step.title" class="approach__step">
           <span class="approach__index">{{ String(index + 1).padStart(2, '0') }}</span>
           <div>
             <h3 class="approach__title">{{ step.title }}</h3>

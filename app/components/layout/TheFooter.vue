@@ -1,26 +1,28 @@
 <script setup lang="ts">
 const year = new Date().getFullYear()
 
-const columns = [
-  {
-    title: 'Gezinme',
-    links: [
-      { label: 'Hakkımda', href: '#hakkimda' },
-      { label: 'Uzmanlık Alanları', href: '#uzmanlik' },
-      { label: 'Yaklaşımım', href: '#yaklasim' },
-      { label: 'Yayınlar', href: '#yayinlar' }
-    ]
-  },
-  {
-    title: 'İletişim',
-    links: [
-      { label: '0 (212) 323 70 75', href: 'tel:+902123237075' },
-      { label: 'Baltalimanı EAH, Sarıyer / İstanbul', href: '#iletisim' }
-    ]
-  }
-]
+const fallback = {
+  tagline: 'Hareketin özgürlüğü, güvenilir ellerde.',
+  legal: 'Bu site bilgilendirme amaçlıdır ve tıbbi tavsiye niteliği taşımaz; randevu için resmi hastane kanallarını (MHRS / Alo 182) kullanınız.'
+}
 
-const socials = [{ label: 'Instagram', href: 'https://www.instagram.com/drkutalmisalbayrak/' }]
+const contactFallback = {
+  phoneDisplay: '0 (212) 323 70 75',
+  phoneHref: '+902123237075',
+  instagramHandle: '@drkutalmisalbayrak',
+  instagramUrl: 'https://www.instagram.com/drkutalmisalbayrak/'
+}
+
+const { data } = await useSiteContent()
+const footer = computed(() => ({ ...fallback, ...(data.value?.footer ?? {}) }))
+const contact = computed(() => ({ ...contactFallback, ...(data.value?.contact ?? {}) }))
+
+const navLinks = [
+  { label: 'Hakkımda', href: '#hakkimda' },
+  { label: 'Uzmanlık Alanları', href: '#uzmanlik' },
+  { label: 'Yaklaşımım', href: '#yaklasim' },
+  { label: 'Yayınlar', href: '#yayinlar' }
+]
 </script>
 
 <template>
@@ -28,24 +30,34 @@ const socials = [{ label: 'Instagram', href: 'https://www.instagram.com/drkutalm
     <div class="container footer__top">
       <div class="footer__brand">
         <span class="footer__mark">KA</span>
-        <p class="footer__tagline">Hareketin özgürlüğü, güvenilir ellerde.</p>
+        <p class="footer__tagline">{{ footer.tagline }}</p>
       </div>
 
       <div class="footer__columns">
-        <div v-for="col in columns" :key="col.title" class="footer__col">
-          <h3>{{ col.title }}</h3>
+        <div class="footer__col">
+          <h3>Gezinme</h3>
           <ul>
-            <li v-for="link in col.links" :key="link.label">
+            <li v-for="link in navLinks" :key="link.label">
               <a :href="link.href" class="link-underline">{{ link.label }}</a>
             </li>
           </ul>
         </div>
 
         <div class="footer__col">
+          <h3>İletişim</h3>
+          <ul>
+            <li><a :href="`tel:${contact.phoneHref}`" class="link-underline">{{ contact.phoneDisplay }}</a></li>
+            <li><a href="#iletisim" class="link-underline">Adres ve harita</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
           <h3>Sosyal Medya</h3>
           <ul>
-            <li v-for="s in socials" :key="s.label">
-              <a :href="s.href" target="_blank" rel="noopener noreferrer" class="link-underline">{{ s.label }}</a>
+            <li>
+              <a :href="contact.instagramUrl" target="_blank" rel="noopener noreferrer" class="link-underline">
+                {{ contact.instagramHandle }}
+              </a>
             </li>
           </ul>
         </div>
@@ -54,10 +66,7 @@ const socials = [{ label: 'Instagram', href: 'https://www.instagram.com/drkutalm
 
     <div class="container footer__legal">
       <p>© {{ year }} Op. Dr. Kutalmış Albayrak. Tüm hakları saklıdır.</p>
-      <p class="footer__disclaimer">
-        Bu site bilgilendirme amaçlıdır ve tıbbi tavsiye niteliği taşımaz; randevu için resmi hastane
-        kanallarını (MHRS / Alo 182) kullanınız.
-      </p>
+      <p class="footer__disclaimer">{{ footer.legal }}</p>
     </div>
   </footer>
 </template>

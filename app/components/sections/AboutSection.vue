@@ -1,34 +1,37 @@
 <script setup lang="ts">
-const credentials = [
-  { year: '2006–2012', text: 'İstanbul Üniversitesi İstanbul Tıp Fakültesi\'nde tıp eğitimi' },
-  { year: '2012–2017', text: 'Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi\'nde Ortopedi ve Travmatoloji ihtisası' },
-  { year: '2017–2019', text: 'Baltalimanı Artroskopi ve Spor Cerrahisi Kliniği\'nde çalıştı' },
-  { year: '2019', text: 'St. Gallen, İsviçre\'de Prof. Dr. Bernhard Jost ve Prof. Dr. Christian Spross mentorluğunda 6 aylık Omuz ve Dirsek Cerrahisi fellowship\'i' },
-  { year: '2019–2022', text: 'Haseki Eğitim ve Araştırma Hastanesi, Van Eğitim ve Araştırma Hastanesi ve Özel İstanbul Cerrahi Hastanesi\'nde görev yaptı' },
-  { year: '2023–halen', text: 'Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi, Ortopedi ve Travmatoloji Kliniği' }
-]
+const fallback = {
+  eyebrow: 'Hakkımda',
+  title: 'Her hasta, kendi hikâyesinin baş rolündedir.',
+  text: 'Ortopedi ve Travmatoloji uzmanıyım; özellikle omuz ve dirsek cerrahisi, spor yaralanmaları ve artroskopik cerrahi alanında çalışıyorum. İyileşme sürecini kısaltmak için mümkün olan her durumda minimal invaziv artroskopik teknikleri tercih ediyor, güncel biyolojik tedavi yöntemlerini yakından takip ediyorum. 2018\'den bu yana İstanbul Tabip Odası basketbol takımının teknik direktörlüğünü de sürdürüyorum.',
+  photoUrl: '/images/kutalmis-albayrak.jpg',
+  timeline: [
+    { year: '2006–2012', text: 'İstanbul Üniversitesi İstanbul Tıp Fakültesi\'nde tıp eğitimi' },
+    { year: '2012–2017', text: 'Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi\'nde Ortopedi ve Travmatoloji ihtisası' },
+    { year: '2017–2019', text: 'Baltalimanı Artroskopi ve Spor Cerrahisi Kliniği\'nde çalıştı' },
+    { year: '2019', text: 'St. Gallen, İsviçre\'de Prof. Dr. Bernhard Jost ve Prof. Dr. Christian Spross mentorluğunda 6 aylık Omuz ve Dirsek Cerrahisi fellowship\'i' },
+    { year: '2019–2022', text: 'Haseki Eğitim ve Araştırma Hastanesi, Van Eğitim ve Araştırma Hastanesi ve Özel İstanbul Cerrahi Hastanesi\'nde görev yaptı' },
+    { year: '2023–halen', text: 'Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi, Ortopedi ve Travmatoloji Kliniği' }
+  ]
+}
+
+const { data } = await useSiteContent()
+const about = computed(() => ({ ...fallback, ...(data.value?.about ?? {}) }))
 </script>
 
 <template>
   <section id="hakkimda" class="section about">
     <div class="container about__grid">
       <div class="about__portrait">
-        <img src="/images/kutalmis-albayrak.jpg" alt="Op. Dr. Kutalmış Albayrak" />
+        <img :src="about.photoUrl" alt="Op. Dr. Kutalmış Albayrak" />
       </div>
 
       <div class="about__content">
-        <p class="eyebrow">Hakkımda</p>
-        <h2 class="section-title">Her hasta, kendi hikâyesinin baş rolündedir.</h2>
-        <p class="section-lead">
-          Ortopedi ve Travmatoloji uzmanıyım; özellikle omuz ve dirsek cerrahisi, spor yaralanmaları ve
-          artroskopik cerrahi alanında çalışıyorum. İyileşme sürecini kısaltmak için mümkün olan her
-          durumda minimal invaziv artroskopik teknikleri tercih ediyor, güncel biyolojik tedavi
-          yöntemlerini yakından takip ediyorum. 2018'den bu yana İstanbul Tabip Odası basketbol
-          takımının teknik direktörlüğünü de sürdürüyorum.
-        </p>
+        <p class="eyebrow">{{ about.eyebrow }}</p>
+        <h2 class="section-title">{{ about.title }}</h2>
+        <p class="section-lead">{{ about.text }}</p>
 
         <ul class="about__timeline">
-          <li v-for="item in credentials" :key="item.year" class="about__timeline-item">
+          <li v-for="item in about.timeline" :key="item.year" class="about__timeline-item">
             <span class="about__year">{{ item.year }}</span>
             <span class="about__text">{{ item.text }}</span>
           </li>

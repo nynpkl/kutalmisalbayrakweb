@@ -1,57 +1,63 @@
 <script setup lang="ts">
-const publications = [
-  {
-    year: '2025',
-    title: 'Long-term clinical comparison of three different femoral stems in Total Hip Arthroplasty with femoral shortening in patients with high-riding hips',
-    venue: 'Journal of Orthopaedic Surgery and Research'
-  },
-  {
-    year: '2025',
-    title: 'The Montecranon classification — a comprehensive treatment strategy for complex proximal ulna fracture dislocations',
-    venue: 'JSES International'
-  },
-  {
-    year: '2025',
-    title: 'Increased lateral, but not medial, posterior tibial slope is associated with early graft failure following anterior cruciate ligament reconstruction',
-    venue: 'BMC Musculoskeletal Disorders'
-  },
-  {
-    year: '2023',
-    title: 'Effect of fracture level on the residual fracture gap during tibial intramedullary nailing for tibial shaft fractures',
-    venue: 'SICOT-J'
-  },
-  {
-    year: '2022',
-    title: 'Overlapping repair and epitenon healing are more stable biomechanically than side to side repair and endotenon healing in achilles tendon lengthening with Z plasty',
-    venue: 'Foot and Ankle Surgery'
-  },
-  {
-    year: '2021',
-    title: 'Leaving the stable ramp lesion unrepaired does not negatively affect clinical and functional outcomes as well as return to sports rates after ACL reconstruction',
-    venue: 'Knee Surgery, Sports Traumatology, Arthroscopy'
-  },
-  {
-    year: '2020',
-    title: 'Early clinical and radiographic results of fixation with the TightRope device for Rockwood type V acromioclavicular joint dislocation: a retrospective review of 15 patients',
-    venue: 'Acta Orthopaedica et Traumatologica Turcica'
-  }
-]
+const fallback = {
+  eyebrow: 'Yayınlar & Akademik Çalışmalar',
+  title: 'Bilimsel katkılar',
+  lead: 'Klinik pratiğinin yanı sıra akademik çalışmalarını sürdürerek uluslararası indeksli dergilerde ortopedi ve travmatoloji literatürüne katkıda bulunuyor.',
+  scholarUrl: 'https://scholar.google.com/citations?user=_pwBOwsAAAAJ&hl=tr',
+  items: [
+    {
+      year: '2025',
+      title: 'Long-term clinical comparison of three different femoral stems in Total Hip Arthroplasty with femoral shortening in patients with high-riding hips',
+      venue: 'Journal of Orthopaedic Surgery and Research'
+    },
+    {
+      year: '2025',
+      title: 'The Montecranon classification — a comprehensive treatment strategy for complex proximal ulna fracture dislocations',
+      venue: 'JSES International'
+    },
+    {
+      year: '2025',
+      title: 'Increased lateral, but not medial, posterior tibial slope is associated with early graft failure following anterior cruciate ligament reconstruction',
+      venue: 'BMC Musculoskeletal Disorders'
+    },
+    {
+      year: '2023',
+      title: 'Effect of fracture level on the residual fracture gap during tibial intramedullary nailing for tibial shaft fractures',
+      venue: 'SICOT-J'
+    },
+    {
+      year: '2022',
+      title: 'Overlapping repair and epitenon healing are more stable biomechanically than side to side repair and endotenon healing in achilles tendon lengthening with Z plasty',
+      venue: 'Foot and Ankle Surgery'
+    },
+    {
+      year: '2021',
+      title: 'Leaving the stable ramp lesion unrepaired does not negatively affect clinical and functional outcomes as well as return to sports rates after ACL reconstruction',
+      venue: 'Knee Surgery, Sports Traumatology, Arthroscopy'
+    },
+    {
+      year: '2020',
+      title: 'Early clinical and radiographic results of fixation with the TightRope device for Rockwood type V acromioclavicular joint dislocation: a retrospective review of 15 patients',
+      venue: 'Acta Orthopaedica et Traumatologica Turcica'
+    }
+  ]
+}
+
+const { data } = await useSiteContent()
+const publications = computed(() => ({ ...fallback, ...(data.value?.publications ?? {}) }))
 </script>
 
 <template>
   <section id="yayinlar" class="section publications">
     <div class="container publications__head">
-      <p class="eyebrow">Yayınlar &amp; Akademik Çalışmalar</p>
-      <h2 class="section-title">Bilimsel katkılar</h2>
-      <p class="section-lead">
-        Klinik pratiğinin yanı sıra akademik çalışmalarını sürdürerek uluslararası indeksli dergilerde
-        ortopedi ve travmatoloji literatürüne katkıda bulunuyor.
-      </p>
+      <p class="eyebrow">{{ publications.eyebrow }}</p>
+      <h2 class="section-title">{{ publications.title }}</h2>
+      <p class="section-lead">{{ publications.lead }}</p>
     </div>
 
     <div class="container">
       <ul class="publications__list">
-        <li v-for="pub in publications" :key="pub.title" class="publications__item">
+        <li v-for="pub in publications.items" :key="pub.title" class="publications__item">
           <span class="publications__year">{{ pub.year }}</span>
           <div class="publications__body">
             <h3 class="publications__title">{{ pub.title }}</h3>
@@ -61,7 +67,7 @@ const publications = [
       </ul>
 
       <a
-        href="https://scholar.google.com/citations?user=_pwBOwsAAAAJ&hl=tr"
+        :href="publications.scholarUrl"
         target="_blank"
         rel="noopener noreferrer"
         class="publications__scholar link-underline"

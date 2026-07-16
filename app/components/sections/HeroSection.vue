@@ -1,19 +1,31 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const fallback = {
+  kicker: 'Op. Dr. Kutalmış Albayrak',
+  titleLine1: 'Hareketin özgürlüğü,',
+  titleLine2: 'güvenilir ellerde.',
+  subtitle: 'Ortopedi ve Travmatoloji — Omuz ve Dirsek Cerrahisi Uzmanı, İstanbul',
+  ctaPrimaryLabel: 'İletişime Geç',
+  ctaSecondaryLabel: 'Hakkımda'
+}
+
+const { data } = await useSiteContent()
+const hero = computed(() => ({ ...fallback, ...(data.value?.hero ?? {}) }))
+</script>
 
 <template>
   <section id="hero" class="hero">
     <div class="hero__bg" aria-hidden="true" />
     <div class="container hero__inner">
-      <p class="hero__kicker">Op. Dr. Kutalmış Albayrak</p>
+      <p class="hero__kicker">{{ hero.kicker }}</p>
       <h1 class="hero__title">
-        Hareketin özgürlüğü,<br />
-        güvenilir ellerde.
+        {{ hero.titleLine1 }}<br />
+        {{ hero.titleLine2 }}
       </h1>
-      <p class="hero__subtitle">Ortopedi ve Travmatoloji — Omuz ve Dirsek Cerrahisi Uzmanı, İstanbul</p>
+      <p class="hero__subtitle">{{ hero.subtitle }}</p>
 
       <div class="hero__actions">
-        <a href="#iletisim" class="btn btn-primary">İletişime Geç</a>
-        <a href="#hakkimda" class="btn btn-ghost">Hakkımda</a>
+        <a href="#iletisim" class="btn btn-primary">{{ hero.ctaPrimaryLabel }}</a>
+        <a href="#hakkimda" class="btn btn-ghost">{{ hero.ctaSecondaryLabel }}</a>
       </div>
     </div>
 

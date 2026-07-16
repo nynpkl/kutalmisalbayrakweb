@@ -3,9 +3,17 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  modules: ['nuxt-auth-utils'],
+
   components: [{ path: '~/components', pathPrefix: false }],
 
   css: ['~/assets/css/main.css'],
+
+  runtimeConfig: {
+    supabaseUrl: '',
+    supabaseServiceKey: '',
+    adminPassword: ''
+  },
 
   app: {
     head: {

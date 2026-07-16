@@ -1,16 +1,21 @@
 <script setup lang="ts">
-const stats = [
-  { value: '9+', label: 'Yıl Ortopedi ve Travmatoloji Uzmanlığı' },
-  { value: '6 Ay', label: 'İsviçre\'de Omuz-Dirsek Cerrahisi Fellowship\'i' },
-  { value: '10+', label: 'Uluslararası İndeksli Bilimsel Yayın' },
-  { value: '5', label: 'Ulusal ve Uluslararası Dernek Üyeliği' }
-]
+const fallback = {
+  items: [
+    { value: '9+', label: 'Yıl Ortopedi ve Travmatoloji Uzmanlığı' },
+    { value: '6 Ay', label: 'İsviçre\'de Omuz-Dirsek Cerrahisi Fellowship\'i' },
+    { value: '10+', label: 'Uluslararası İndeksli Bilimsel Yayın' },
+    { value: '5', label: 'Ulusal ve Uluslararası Dernek Üyeliği' }
+  ]
+}
+
+const { data } = await useSiteContent()
+const stats = computed(() => ({ ...fallback, ...(data.value?.stats ?? {}) }))
 </script>
 
 <template>
   <section class="section stats">
     <div class="container stats__grid">
-      <div v-for="stat in stats" :key="stat.label" class="stats__item">
+      <div v-for="stat in stats.items" :key="stat.label" class="stats__item">
         <span class="stats__value">{{ stat.value }}</span>
         <span class="stats__label">{{ stat.label }}</span>
       </div>

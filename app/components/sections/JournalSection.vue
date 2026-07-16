@@ -1,33 +1,40 @@
 <script setup lang="ts">
-const posts = [
-  {
-    date: '12 Haziran 2026',
-    title: 'Omuz artroskopisi sonrası iyileşme süreci nasıl işler?',
-    excerpt: 'Ameliyat sonrası ilk haftalar, fizyoterapi takvimi ve günlük yaşama dönüş hakkında bilinmesi gerekenler.'
-  },
-  {
-    date: '3 Mayıs 2026',
-    title: 'Ön çapraz bağ (ÖÇB) yırtığında ameliyat şart mı?',
-    excerpt: 'Konservatif tedavi ile cerrahi arasındaki karar sürecini etkileyen faktörler.'
-  },
-  {
-    date: '21 Mart 2026',
-    title: 'Donuk omuz (frozen shoulder) ile omuz sıkışma sendromu arasındaki fark',
-    excerpt: 'Benzer belirtilere sahip bu iki durumun tanı ve tedavi yaklaşımındaki farklılıklar.'
-  }
-]
+const fallback = {
+  eyebrow: 'Sağlık Notları',
+  title: 'Güncel yazılar',
+  posts: [
+    {
+      date: '12 Haziran 2026',
+      title: 'Omuz artroskopisi sonrası iyileşme süreci nasıl işler?',
+      excerpt: 'Ameliyat sonrası ilk haftalar, fizyoterapi takvimi ve günlük yaşama dönüş hakkında bilinmesi gerekenler.'
+    },
+    {
+      date: '3 Mayıs 2026',
+      title: 'Ön çapraz bağ (ÖÇB) yırtığında ameliyat şart mı?',
+      excerpt: 'Konservatif tedavi ile cerrahi arasındaki karar sürecini etkileyen faktörler.'
+    },
+    {
+      date: '21 Mart 2026',
+      title: 'Donuk omuz (frozen shoulder) ile omuz sıkışma sendromu arasındaki fark',
+      excerpt: 'Benzer belirtilere sahip bu iki durumun tanı ve tedavi yaklaşımındaki farklılıklar.'
+    }
+  ]
+}
+
+const { data } = await useSiteContent()
+const journal = computed(() => ({ ...fallback, ...(data.value?.journal ?? {}) }))
 </script>
 
 <template>
   <section class="section journal">
     <div class="container journal__head">
-      <p class="eyebrow">Sağlık Notları</p>
-      <h2 class="section-title">Güncel yazılar</h2>
+      <p class="eyebrow">{{ journal.eyebrow }}</p>
+      <h2 class="section-title">{{ journal.title }}</h2>
       <a href="#" class="journal__all link-underline">Tüm yazıları gör →</a>
     </div>
 
     <div class="container journal__grid">
-      <article v-for="post in posts" :key="post.title" class="journal-card">
+      <article v-for="post in journal.posts" :key="post.title" class="journal-card">
         <span class="journal-card__date">{{ post.date }}</span>
         <h3 class="journal-card__title">{{ post.title }}</h3>
         <p class="journal-card__excerpt">{{ post.excerpt }}</p>

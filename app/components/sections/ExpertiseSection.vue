@@ -1,51 +1,50 @@
 <script setup lang="ts">
-const items = [
-  {
-    no: '01',
-    title: 'Omuz Cerrahisi ve Artroskopisi',
-    text: 'Omuz instabilitesi, rotator manşet yırtıkları ve sıkışma sendromlarında artroskopik (kapalı) cerrahi teknikler.'
-  },
-  {
-    no: '02',
-    title: 'Dirsek Cerrahisi',
-    text: 'Dirsek kırık-çıkıkları, instabilite ve kompleks travma sonrası rekonstrüksiyonda ileri düzey cerrahi deneyim.'
-  },
-  {
-    no: '03',
-    title: 'Spor Yaralanmaları',
-    text: 'Ön çapraz bağ (ÖÇB) ve menisküs yırtıklarında artroskopik onarım ile sporcuların sahaya güvenli dönüşü.'
-  },
-  {
-    no: '04',
-    title: 'Diz ve Kalça Protez Cerrahisi',
-    text: 'İleri düzey artroz vakalarında protez cerrahisi ve karmaşık revizyon operasyonları.'
-  },
-  {
-    no: '05',
-    title: 'Kırık ve Travma Cerrahisi',
-    text: 'Uzun kemik kırıklarında intramedüller çivileme ve plak-vida sistemleriyle güncel tedavi yöntemleri.'
-  },
-  {
-    no: '06',
-    title: 'Ayak ve Ayak Bileği Cerrahisi',
-    text: 'Hallux valgus ve aşil tendon onarımı başta olmak üzere ayak-ayak bileği bölgesi cerrahi tedavileri.'
-  }
-]
+const fallback = {
+  eyebrow: 'Uzmanlık Alanları',
+  title: 'Odaklandığım cerrahi branşlar',
+  lead: 'Her vaka kendi özelinde değerlendirilir; tanı, ameliyat ve iyileşme sürecinin tamamında hastayla birlikte ilerleyen bir tedavi planı oluşturulur.',
+  items: [
+    {
+      title: 'Omuz Cerrahisi ve Artroskopisi',
+      text: 'Omuz instabilitesi, rotator manşet yırtıkları ve sıkışma sendromlarında artroskopik (kapalı) cerrahi teknikler.'
+    },
+    {
+      title: 'Dirsek Cerrahisi',
+      text: 'Dirsek kırık-çıkıkları, instabilite ve kompleks travma sonrası rekonstrüksiyonda ileri düzey cerrahi deneyim.'
+    },
+    {
+      title: 'Spor Yaralanmaları',
+      text: 'Ön çapraz bağ (ÖÇB) ve menisküs yırtıklarında artroskopik onarım ile sporcuların sahaya güvenli dönüşü.'
+    },
+    {
+      title: 'Diz ve Kalça Protez Cerrahisi',
+      text: 'İleri düzey artroz vakalarında protez cerrahisi ve karmaşık revizyon operasyonları.'
+    },
+    {
+      title: 'Kırık ve Travma Cerrahisi',
+      text: 'Uzun kemik kırıklarında intramedüller çivileme ve plak-vida sistemleriyle güncel tedavi yöntemleri.'
+    },
+    {
+      title: 'Ayak ve Ayak Bileği Cerrahisi',
+      text: 'Hallux valgus ve aşil tendon onarımı başta olmak üzere ayak-ayak bileği bölgesi cerrahi tedavileri.'
+    }
+  ]
+}
+
+const { data } = await useSiteContent()
+const expertise = computed(() => ({ ...fallback, ...(data.value?.expertise ?? {}) }))
 </script>
 
 <template>
   <section id="uzmanlik" class="section expertise">
     <div class="container">
-      <p class="eyebrow">Uzmanlık Alanları</p>
-      <h2 class="section-title">Odaklandığım cerrahi branşlar</h2>
-      <p class="section-lead">
-        Her vaka kendi özelinde değerlendirilir; tanı, ameliyat ve iyileşme sürecinin tamamında hastayla
-        birlikte ilerleyen bir tedavi planı oluşturulur.
-      </p>
+      <p class="eyebrow">{{ expertise.eyebrow }}</p>
+      <h2 class="section-title">{{ expertise.title }}</h2>
+      <p class="section-lead">{{ expertise.lead }}</p>
 
       <div class="expertise__grid">
-        <article v-for="item in items" :key="item.no" class="expertise__card">
-          <span class="expertise__no">{{ item.no }}</span>
+        <article v-for="(item, index) in expertise.items" :key="item.title" class="expertise__card">
+          <span class="expertise__no">{{ String(index + 1).padStart(2, '0') }}</span>
           <h3 class="expertise__title">{{ item.title }}</h3>
           <p class="expertise__text">{{ item.text }}</p>
         </article>

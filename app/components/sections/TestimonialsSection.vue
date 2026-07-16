@@ -5,42 +5,50 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-const themes = [
-  {
-    title: 'Detaylı Bilgilendirme',
-    text: 'Hasta değerlendirmelerinde en sık öne çıkan konu, ameliyat öncesi süreç ve tedavi alternatifleri hakkında yapılan ayrıntılı bilgilendirme.'
-  },
-  {
-    title: 'Yakın Ameliyat Sonrası Takip',
-    text: 'Kontrol randevularında gösterilen özen ve erişilebilirlik, hastalar tarafından sıkça vurgulanan bir diğer nokta.'
-  },
-  {
-    title: 'Minimal İnvaziv Yaklaşım',
-    text: 'Artroskopik tekniklerin iyileşme sürecini kısaltmasına dair olumlu geri bildirimler yer alıyor.'
-  },
-  {
-    title: 'Rehabilitasyon Sürecinde Yönlendirme',
-    text: 'Özellikle spor yaralanması hastaları, sahaya/güncel yaşama dönüş sürecindeki yönlendirmeyi değerli buluyor.'
-  }
-]
+const fallback = {
+  eyebrow: 'Hasta Değerlendirmeleri',
+  title: 'Hasta değerlendirmelerinde öne çıkanlar',
+  lead: 'Aşağıdaki başlıklar, doktor randevu platformlarında paylaşılan hasta değerlendirmelerinde tekrar eden ortak temaları özetlemektedir; birebir alıntı değildir.',
+  rating: '5/5',
+  ratingLabel: 'DoktorTakvimi.com üzerinde paylaşılan hasta puanı',
+  ratingUrl: 'https://www.doktortakvimi.com/kutalmis-albayrak/ortopedi-ve-travmatoloji/istanbul',
+  themes: [
+    {
+      title: 'Detaylı Bilgilendirme',
+      text: 'Hasta değerlendirmelerinde en sık öne çıkan konu, ameliyat öncesi süreç ve tedavi alternatifleri hakkında yapılan ayrıntılı bilgilendirme.'
+    },
+    {
+      title: 'Yakın Ameliyat Sonrası Takip',
+      text: 'Kontrol randevularında gösterilen özen ve erişilebilirlik, hastalar tarafından sıkça vurgulanan bir diğer nokta.'
+    },
+    {
+      title: 'Minimal İnvaziv Yaklaşım',
+      text: 'Artroskopik tekniklerin iyileşme sürecini kısaltmasına dair olumlu geri bildirimler yer alıyor.'
+    },
+    {
+      title: 'Rehabilitasyon Sürecinde Yönlendirme',
+      text: 'Özellikle spor yaralanması hastaları, sahaya/güncel yaşama dönüş sürecindeki yönlendirmeyi değerli buluyor.'
+    }
+  ]
+}
+
+const { data } = await useSiteContent()
+const testimonials = computed(() => ({ ...fallback, ...(data.value?.testimonials ?? {}) }))
 </script>
 
 <template>
   <section id="yorumlar" class="section testimonials">
     <div class="container">
-      <p class="eyebrow">Hasta Değerlendirmeleri</p>
-      <h2 class="section-title">Hasta değerlendirmelerinde öne çıkanlar</h2>
-      <p class="section-lead">
-        Aşağıdaki başlıklar, doktor randevu platformlarında paylaşılan hasta değerlendirmelerinde tekrar
-        eden ortak temaları özetlemektedir; birebir alıntı değildir.
-      </p>
+      <p class="eyebrow">{{ testimonials.eyebrow }}</p>
+      <h2 class="section-title">{{ testimonials.title }}</h2>
+      <p class="section-lead">{{ testimonials.lead }}</p>
 
       <div class="testimonials__rating">
-        <span class="testimonials__rating-score">5/5</span>
+        <span class="testimonials__rating-score">{{ testimonials.rating }}</span>
         <div>
-          <p class="testimonials__rating-label">DoktorTakvimi.com üzerinde paylaşılan hasta puanı</p>
+          <p class="testimonials__rating-label">{{ testimonials.ratingLabel }}</p>
           <a
-            href="https://www.doktortakvimi.com/kutalmis-albayrak/ortopedi-ve-travmatoloji/istanbul"
+            :href="testimonials.ratingUrl"
             target="_blank"
             rel="noopener noreferrer"
             class="link-underline"
@@ -61,7 +69,7 @@ const themes = [
           1180: { slidesPerView: 3 }
         }"
       >
-        <SwiperSlide v-for="theme in themes" :key="theme.title">
+        <SwiperSlide v-for="theme in testimonials.themes" :key="theme.title">
           <article class="testimonial-card">
             <h3 class="testimonial-card__title">{{ theme.title }}</h3>
             <p class="testimonial-card__text">{{ theme.text }}</p>
