@@ -99,12 +99,46 @@ Dummy içerik, web'de yapılan geniş bir araştırma sonucunda bulunan **doğru
 - ⚠️ kutalmisalbayrak.com alan adı şu anda çalışmıyor (Wix bağlantı hatası); bu, sahibinin kendi sitesinin domain bağlantısını yenilemesi gerektiğine işaret ediyor olabilir.
 - Playwright ile ekran görüntüleri alınarak Hakkımda, Uzmanlık Alanları, İstatistikler, Yayınlar, Hasta Değerlendirmeleri, İletişim ve Footer bölümlerinin doğru render edildiği görsel olarak doğrulandı.
 
+## 10. GitHub'a aktarım ve Vercel'e deploy
+
+- Yerel bir git deposu oluşturuldu; commit kimliği kullanıcının kişisel hesabına (`nynpkl@gmail.com`) göre **repo-local** olarak ayarlandı (global git ayarları — iş/mapfre hesabı — hiç değiştirilmedi).
+- GitHub CLI (`gh`) kurulup tarayıcı tabanlı cihaz kodu akışıyla (`gh auth login --web`) kullanıcının `nynpkl` GitHub hesabına giriş yapıldı; `gh auth setup-git` ile git push için kimlik doğrulama bağlandı.
+- Kod, kullanıcının oluşturduğu [github.com/nynpkl/kutalmisalbayrakweb](https://github.com/nynpkl/kutalmisalbayrakweb) deposuna push edildi.
+- Vercel'e deploy için GitHub + Vercel Dashboard entegrasyon yöntemi seçildi: kullanıcı `kutalmisalbayrakweb@gmail.com` hesabıyla Vercel'de projeyi GitHub reposundan import etti; sonraki her `git push` otomatik yeniden deploy tetikliyor.
+- İletişim bölümündeki harita yer tutucusu, kullanıcının paylaştığı gerçek Google Maps linkinden (hastanenin konumu, 41.0956288, 29.0538758) doğrulanarak canlı bir `<iframe>` gömmesiyle değiştirildi.
+
+## 11. Şifre korumalı admin panel ve Supabase CMS entegrasyonu
+
+Kullanıcının "tüm içeriği doktorun kendisi yönetebilsin" isteği üzerine, siteye tam bir içerik yönetim katmanı eklendi.
+
+**Mimari seçimi:** Kullanıcıya üç seçenek sunuldu (özel admin panel + veritabanı / hazır headless CMS / Git tabanlı CMS); kullanıcı **Supabase (ücretsiz Postgres + Storage) destekli özel admin panel**i seçti — GitHub veya kod bilgisi gerektirmeden, doktorun sadece şifreyle giriş yapabileceği bir çözüm.
+
+**Kurulan altyapı:**
+- **Supabase projesi**: Kullanıcı `supabase.com` üzerinden proje oluşturdu; `service_role` anahtarı ve veritabanı şifresi paylaşıldı.
+  - Doğrudan veritabanı bağlantısı (`db.xxx.supabase.co`) bu ortamda yalnızca IPv6 üzerinden çalıştığından ve ortamın IPv6 desteği olmadığından, Supabase'in **IPv4 uyumlu "Session Pooler"** bağlantısı (`aws-0-eu-west-1.pooler.supabase.com`) kullanıldı.
+  - `supabase/schema.sql` ile tek bir `sections` tablosu oluşturuldu (`id text primary key`, `data jsonb`) — her site bölümü (hero, hakkımda, uzmanlık, istatistik, yaklaşım, yayınlar, hasta değerlendirmeleri, iletişim, blog, footer) bu tabloda tek bir JSON satırı olarak saklanıyor.
+  - Görsel yüklemeleri için `site-images` adlı herkese açık bir Supabase Storage bucket'ı oluşturuldu.
+  - `supabase/seed.mjs` script'i ile sitede o ana kadar bulunan **gerçek** içeriğin tamamı veritabanına yüklendi (dummy/örnek veri değil).
+- **Kimlik doğrulama**: `nuxt-auth-utils` modülü ile şifrelenmiş oturum çerezleri kullanılıyor. `/admin` ve altındaki tüm sayfalar `app/middleware/admin.ts` ile korunuyor; giriş yapılmamışsa `/admin/login`'e yönlendiriyor. Şifre, ortam değişkeni (`NUXT_ADMIN_PASSWORD`) ile karşılaştırılıyor — kod içinde hiçbir yerde sabit yazılı değil.
+- **Server API** (`server/api/`):
+  - `GET /api/content` — herkese açık, tüm bölümlerin güncel içeriğini döner (site bunu kullanarak render olur).
+  - `PUT /api/admin/content/:section` — sadece giriş yapılmışsa çalışır, ilgili bölümün JSON verisini günceller.
+  - `POST /api/admin/upload` — sadece giriş yapılmışsa çalışır, yüklenen görseli Supabase Storage'a koyup genel erişime açık URL döner.
+  - `POST /api/admin/login` — şifreyi doğrulayıp oturum açar.
+- **Dayanıklılık**: Her site bölümü bileşeni artık `useSiteContent()` composable'ı ile `/api/content`'ten veri çekiyor, ancak veritabanına erişilemezse (yanlış yapılandırma, geçici kesinti vb.) bileşenin içinde tanımlı **gerçek içerik fallback'i** devreye giriyor — yani veritabanı çökse bile site asla boş/bozuk görünmüyor.
+- **Admin paneli** (`/admin`, `app/pages/admin/index.vue`): Sol menüden 10 bölüm arasında geçiş yapılabiliyor; her bölüm için metin alanları, çok satırlı açıklamalar ve liste tipi içerikler (zaman çizelgesi, kartlar, istatistikler, yayınlar, temalar, blog yazıları) için satır ekleme/silme arayüzü var. Hakkımda sekmesinde ayrıca profil fotoğrafını değiştirme (dosya seçip otomatik Supabase'e yükleme) özelliği bulunuyor. Her bölümün kendi "Kaydet" butonu var.
+
+**Uçtan uca test edildi:** Giriş yapma, mevcut gerçek içeriğin panelde doğru göründüğü, bir alanı değiştirip kaydetme, bu değişikliğin hem veritabanına hem canlı siteye yansıdığı, fotoğraf yükleme, ve veritabanı yokken bile sitenin fallback içerikle çalışması Playwright ile doğrulandı.
+
+**Kullanıcıya iletilen ortam değişkenleri** (hem yerel `.env` hem Vercel Dashboard → Settings → Environment Variables için): `NUXT_SUPABASE_URL`, `NUXT_SUPABASE_SERVICE_KEY`, `NUXT_ADMIN_PASSWORD`, `NUXT_SESSION_PASSWORD`.
+
+⚠️ **Güvenlik notu:** Kurulum sırasında kullanıcı, veritabanı şifresini ve `service_role` anahtarını sohbet üzerinden düz metin olarak paylaştı. Bu bilgiler yalnızca yerel `.env` dosyasına (git'e dahil değil) ve Vercel'in şifreli ortam değişkeni deposuna yazıldı; başka hiçbir yere kaydedilmedi. Yine de ekstra güvenlik için kullanıcı isterse Supabase Dashboard'dan veritabanı şifresini sıfırlayabilir (bu durumda Vercel/`.env`'deki `NUXT_SUPABASE_URL` aynı kalır, sadece yeni bağlantı string'i gerekirse güncellenir).
+
 ## Sonraki adımlar (kullanıcıyla birlikte yapılacak)
 
 - [ ] Doktorun kendisiyle teyit: biyografideki tarihler/kurumlar, üyelikler ve yayın listesinin güncelliği.
-- [ ] Orijinal, yüksek çözünürlüklü profil fotoğrafı ve klinik/ameliyathane görselleri temin etmek.
-- [ ] Gerçek harita entegrasyonu (Google Maps embed).
-- [ ] İletişim formunu gerçek bir gönderim mekanizmasına (e-posta servisi veya backend) bağlamak.
-- [ ] İzin alınmış gerçek hasta yorumları varsa (kimlik/gizlilik onayıyla) `TestimonialsSection.vue`'a eklemek.
+- [ ] Orijinal, yüksek çözünürlüklü profil fotoğrafı ve klinik/ameliyathane görselleri admin panelinden yüklemek.
+- [ ] İletişim formunu (ad/telefon/mesaj) gerçek bir gönderim mekanizmasına (e-posta servisi veya backend) bağlamak — şu an sadece statik bir arayüz.
+- [ ] İzin alınmış gerçek hasta yorumları varsa (kimlik/gizlilik onayıyla) admin panelinden "Hasta Değerlendirmeleri" bölümüne eklemek.
 - [ ] Gerekirse çoklu dil desteği (referans sitede olduğu gibi) eklemek.
-- [ ] Canlıya almadan önce `npm run build` ile prodüksiyon derlemesini test etmek ve bir barındırma servisine (Vercel, Netlify, vb.) dağıtmak.
+- [ ] Admin şifresini (`NUXT_ADMIN_PASSWORD`) periyodik olarak değiştirmek; ileride birden fazla kullanıcı/rol gerekirse tam bir kullanıcı tablosuna geçmek.
