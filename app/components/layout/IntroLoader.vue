@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Sayfa ilk açıldığında gösterilen tam ekran giriş (intro) ekranı.
 // SSR ile render edilir; böylece site görünmeden önce ilk karede intro ekranı hazır olur.
-const INTRO_IMAGE = '/images/intro.jpg'
+const INTRO_IMAGE = '/images/intro.png'
 const MIN_DURATION = 3000 // barın dolma süresi (ms)
 
 const visible = ref(true)

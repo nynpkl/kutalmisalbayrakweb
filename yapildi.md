@@ -139,7 +139,7 @@ Kullanıcının "tüm içeriği doktorun kendisi yönetebilsin" isteği üzerine
 Referans sitedeki (instrosenberg.ch) açılış ekranı incelendi: `pace.js` ile tam ekran bir fotoğraf, ortada logo/yazı ve altında soldan sağa dolan 1px'lik beyaz bir çizgi; yükleme bitince ekran kararıp site açılıyor.
 
 - `app/components/layout/IntroLoader.vue` eklendi ve `app/layouts/default.vue` içine konuldu (admin paneli `blank` layout kullandığı için orada görünmez).
-- Görsel: kullanıcının eklediği `public/images/intro.png` (fotoğraf + KA logosu + isim + çizgi) `public/images/intro.jpg` olarak sıkıştırıldı (1,7 MB → 213 KB).
+- Görsel: kullanıcının eklediği `public/images/intro.png` (fotoğraf + KA logosu + isim + çizgi) netlik kaybı olmasın diye sıkıştırılmadan, doğrudan PNG olarak kullanılıyor (JPG sıkıştırması ince beyaz yazılarda bulanıklık yapıyordu).
 - "SHOULDER · ELBOW · SPORTS SURGERY" yazısının altında, görseldeki isim altı çizgisiyle aynı genişlikte bir bar ~3 saniyede doluyor; ardından intro 0,7 sn'de kararıp kayboluyor. Süre `MIN_DURATION` sabitinden ayarlanır.
 - Süre, sayfa isteğinin başından değil barın ekranda dolmaya başladığı andan sayılır (CSS animasyonunun bitişi beklenir); böylece sayfa geç açılsa bile intro kısa kesilmez.
 - Masaüstünde görsel ekranı doldurur; dikey (mobil) ekranlarda yazılar kırpılmasın diye görsel ortada, arkası aynı görselin bulanık kopyasıyla ve yumuşak geçişle tamamlanır.
