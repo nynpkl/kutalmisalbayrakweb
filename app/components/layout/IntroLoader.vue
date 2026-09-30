@@ -88,22 +88,31 @@ onMounted(async () => {
   filter: blur(28px) brightness(0.75);
 }
 
-/* Görsel, ekranı "cover" gibi doldurur; ancak logo ve yazılar hiçbir ekranda kırpılmasın diye
-   genişlik üst sınırlıdır (dar/dikey ekranlarda arka planı bulanık kopya tamamlar). */
+/* Görsel her ekranda kırpılmadan, tamamı görünecek şekilde sığdırılır ("contain");
+   kalan boşlukları aynı görselin bulanık kopyası tamamlar. */
 .intro__stage {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(max(100vw, calc(100svh * 1367 / 1150)), 138vw);
+  width: min(100vw, calc(100svh * 1367 / 1150));
   aspect-ratio: 1367 / 1150;
   transform: translate(-50%, -50%);
 }
 
-/* Görsel ekranı dikeyde dolduramadığında üst/alt kenarlar bulanık arka plana yumuşakça karışsın */
+/* Yatay ekranlarda sağ/sol kenarlar bulanık arka plana yumuşakça karışsın
+   (soldaki yüz ~%10'dan başladığı için sol geçiş dar tutuldu) */
+@media (min-aspect-ratio: 1367 / 1150) {
+  .intro__stage {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 92%, transparent 100%);
+  }
+}
+
+/* Dikey ekranlarda üst/alt kenarlar (bone görselin en üstünde olduğu için üst geçiş dar tutuldu) */
 @media (max-aspect-ratio: 1367 / 1150) {
   .intro__stage {
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 3%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 3%, #000 88%, transparent 100%);
   }
 }
 
@@ -117,9 +126,9 @@ onMounted(async () => {
    Konum/genişlik, görseldeki isim altı çizgisiyle hizalı olacak şekilde yüzde olarak verilir. */
 .intro__bar {
   position: absolute;
-  top: 72.3%;
-  left: 14.9%;
-  width: 70.2%;
+  top: 69.7%;
+  left: 18.14%;
+  width: 65.1%;
   height: 1px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.2);

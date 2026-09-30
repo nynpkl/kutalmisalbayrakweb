@@ -142,7 +142,7 @@ Referans sitedeki (instrosenberg.ch) açılış ekranı incelendi: `pace.js` ile
 - Görsel: kullanıcının eklediği `public/images/intro.png` (fotoğraf + KA logosu + isim + çizgi) netlik kaybı olmasın diye sıkıştırılmadan, doğrudan PNG olarak kullanılıyor (JPG sıkıştırması ince beyaz yazılarda bulanıklık yapıyordu).
 - "SHOULDER · ELBOW · SPORTS SURGERY" yazısının altında, görseldeki isim altı çizgisiyle aynı genişlikte bir bar ~3 saniyede doluyor; ardından intro 0,7 sn'de kararıp kayboluyor. Süre `MIN_DURATION` sabitinden ayarlanır.
 - Süre, sayfa isteğinin başından değil barın ekranda dolmaya başladığı andan sayılır (CSS animasyonunun bitişi beklenir); böylece sayfa geç açılsa bile intro kısa kesilmez.
-- Masaüstünde görsel ekranı doldurur; dikey (mobil) ekranlarda yazılar kırpılmasın diye görsel ortada, arkası aynı görselin bulanık kopyasıyla ve yumuşak geçişle tamamlanır.
+- Görsel her ekranda kırpılmadan tamamı görünecek şekilde sığdırılır (önceki "ekranı doldur" yaklaşımı masaüstünde bonenin kesilmesine yol açıyordu); kalan boşlukları aynı görselin bulanık kopyası yumuşak geçişle tamamlar. Bar konumu görsel piksel ölçülerek (çizgi y=719, x=248–1137) hizalandı.
 - Güvenlik ağları: sayfa en geç 6 sn içinde yüklenmezse intro yine kapanır; JS hiç çalışmazsa CSS ile 8 sn sonra kendiliğinden kaybolur. Intro açıkken sayfa kaydırılamaz.
 
 ## 13. Supabase duraklatma sorunu ve günlük "canlı tutma" isteği
