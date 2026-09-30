@@ -31,76 +31,58 @@ const fallback = {
   ]
 }
 
-const { data } = await useSiteContent()
-const expertise = computed(() => ({ ...fallback, ...(data.value?.expertise ?? {}) }))
+const expertise = await useSection('expertise', fallback)
+const { t, pathTo } = useLang()
+
+withDefaults(defineProps<{ mode?: 'list' | 'detail' }>(), { mode: 'list' })
 </script>
 
 <template>
-  <section id="uzmanlik" class="section expertise">
-    <div class="container">
-      <p class="eyebrow">{{ expertise.eyebrow }}</p>
-      <h2 class="section-title">{{ expertise.title }}</h2>
-      <p class="section-lead">{{ expertise.lead }}</p>
+  <!-- Ana sayfada iki sütunlu noktalı liste; Uzmanlık sayfasında yeşil başlıklı bloklar -->
+  <section class="expertise">
+    <template v-if="mode === 'list'">
+      <h2 class="t-main-menu center wrap-list">{{ expertise.eyebrow }}:</h2>
+      <ul class="dot-list t-list wrap-list expertise__list">
+        <li v-for="item in expertise.items" :key="item.title">
+          <strong>{{ item.title }}:</strong> {{ item.text }}
+        </li>
+      </ul>
+      <p class="t-text-big wrap-text expertise__lead">{{ expertise.lead }}</p>
+    </template>
 
-      <div class="expertise__grid">
-        <article v-for="(item, index) in expertise.items" :key="item.title" class="expertise__card">
-          <span class="expertise__no">{{ String(index + 1).padStart(2, '0') }}</span>
-          <h3 class="expertise__title">{{ item.title }}</h3>
-          <p class="expertise__text">{{ item.text }}</p>
-        </article>
+    <template v-else>
+      <p class="t-text-big wrap-text">{{ expertise.lead }}</p>
+      <div class="wrap-text block">
+        <div v-for="item in expertise.items" :key="item.title" class="result">
+          <h3 class="result__title t-result-title">{{ item.title }}</h3>
+          <p class="result__text t-result-text">{{ item.text }}</p>
+        </div>
       </div>
-    </div>
+      <div class="center block">
+        <NuxtLink :to="pathTo('contact')" class="btn">{{ t('bookAppointment') }}</NuxtLink>
+      </div>
+    </template>
   </section>
 </template>
 
 <style scoped>
-.expertise__grid {
-  margin-top: 56px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--color-line);
-  border: 1px solid var(--color-line);
+.expertise__list {
+  margin-top: 48px;
+  columns: 2;
+  column-gap: 70px;
 }
 
-@media (min-width: 700px) {
-  .expertise__grid {
-    grid-template-columns: repeat(2, 1fr);
+.expertise__list li {
+  break-inside: avoid;
+}
+
+@media (max-width: 743px) {
+  .expertise__list {
+    columns: 1;
   }
 }
 
-@media (min-width: 1100px) {
-  .expertise__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.expertise__card {
-  background: var(--color-bg);
-  padding: 40px 32px;
-  transition: background-color 0.3s ease;
-}
-
-.expertise__card:hover {
-  background: var(--color-accent-soft);
-}
-
-.expertise__no {
-  font-family: var(--font-display);
-  font-size: 15px;
-  color: var(--color-accent);
-}
-
-.expertise__title {
-  font-family: var(--font-display);
-  font-size: 24px;
-  margin-top: 18px;
-}
-
-.expertise__text {
-  margin-top: 14px;
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--color-muted);
+.expertise__lead {
+  margin-top: 80px;
 }
 </style>

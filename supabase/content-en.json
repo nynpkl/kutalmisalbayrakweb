@@ -1,0 +1,190 @@
+{
+  "hero": {
+    "kicker": "Assoc. Prof. Dr. Kutalmış Albayrak",
+    "titleLine1": "Freedom of movement,",
+    "titleLine2": "in trusted hands.",
+    "subtitle": "Orthopaedics and Traumatology — Shoulder and Elbow Surgery, Istanbul",
+    "ctaPrimaryLabel": "Get in Touch",
+    "ctaSecondaryLabel": "About"
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "Every patient is at the heart of their own story.",
+    "text": "I am a specialist in Orthopaedics and Traumatology with a particular focus on shoulder and elbow surgery, sports injuries and arthroscopic surgery. Wherever clinically appropriate, I favour minimally invasive arthroscopic techniques to shorten recovery, and I closely follow current developments in biological treatment modalities. Since 2018, I have also served as head coach of the Istanbul Medical Chamber basketball team.",
+    "timeline": [
+      {
+        "year": "2006–2012",
+        "title": "Istanbul Faculty of Medicine",
+        "text": "Medical education at Istanbul University, Istanbul Faculty of Medicine."
+      },
+      {
+        "year": "2012–2017",
+        "title": "Residency in Orthopaedics and Traumatology",
+        "text": "Residency training in Orthopaedics and Traumatology at Metin Sabancı Baltalimanı Bone Diseases Training and Research Hospital."
+      },
+      {
+        "year": "2017–2019",
+        "title": "Arthroscopy and Sports Surgery",
+        "text": "Clinical practice at the Baltalimanı Arthroscopy and Sports Surgery Clinic."
+      },
+      {
+        "year": "2019",
+        "title": "Shoulder and Elbow Surgery Fellowship — Switzerland",
+        "text": "Six-month fellowship in shoulder and elbow surgery in St. Gallen, Switzerland, under the mentorship of Prof. Dr. Bernhard Jost and Prof. Dr. Christian Spross."
+      },
+      {
+        "year": "2019–2022",
+        "title": "Haseki, Van and Istanbul Surgery Hospitals",
+        "text": "Held clinical positions at Haseki Training and Research Hospital, Van Training and Research Hospital and the private Istanbul Surgery Hospital."
+      },
+      {
+        "year": "2023–present",
+        "title": "Baltalimanı Bone Diseases Training and Research Hospital",
+        "text": "Department of Orthopaedics and Traumatology, Metin Sabancı Baltalimanı Bone Diseases Training and Research Hospital."
+      }
+    ]
+  },
+  "expertise": {
+    "eyebrow": "Areas of Expertise",
+    "title": "Surgical fields of focus",
+    "lead": "Each case is assessed on its own merits; a treatment plan is developed together with the patient and carried through diagnosis, surgery and the entire recovery process.",
+    "items": [
+      {
+        "title": "Shoulder Surgery and Arthroscopy",
+        "text": "Arthroscopic (minimally invasive) techniques for shoulder instability, rotator cuff tears and impingement syndromes."
+      },
+      {
+        "title": "Elbow Surgery",
+        "text": "Advanced surgical expertise in elbow fracture-dislocations, instability and reconstruction following complex trauma."
+      },
+      {
+        "title": "Sports Injuries",
+        "text": "Arthroscopic repair of anterior cruciate ligament (ACL) and meniscal tears, enabling athletes to return safely to play."
+      },
+      {
+        "title": "Knee and Hip Arthroplasty",
+        "text": "Joint replacement surgery for advanced osteoarthritis, as well as complex revision procedures."
+      },
+      {
+        "title": "Fracture and Trauma Surgery",
+        "text": "Contemporary treatment of long-bone fractures using intramedullary nailing and plate-and-screw fixation."
+      },
+      {
+        "title": "Foot and Ankle Surgery",
+        "text": "Surgical treatment of foot and ankle conditions, notably hallux valgus correction and Achilles tendon repair."
+      }
+    ]
+  },
+  "stats": {
+    "items": [
+      { "value": "9+", "label": "Years of specialist practice in Orthopaedics and Traumatology" },
+      { "value": "6 Months", "label": "Shoulder and Elbow Surgery Fellowship in Switzerland" },
+      { "value": "10+", "label": "Publications in internationally indexed journals" },
+      { "value": "5", "label": "Memberships in national and international societies" }
+    ]
+  },
+  "approach": {
+    "eyebrow": "My Approach",
+    "title": "A transparent, calm and patient-centred process",
+    "lead": "A decision for surgery often marks an anxious period in a patient's life. To make this process as clear and predictable as possible, I prioritise open communication at every stage.",
+    "steps": [
+      {
+        "title": "Assessment",
+        "text": "At the initial consultation, your symptoms and imaging studies (MRI/X-ray) are reviewed together, and time is set aside for your questions."
+      },
+      {
+        "title": "Treatment Plan",
+        "text": "Whether conservative management or surgery is indicated is clarified, and alternative options are explained openly."
+      },
+      {
+        "title": "Surgery",
+        "text": "Minimally invasive arthroscopic techniques are preferred wherever possible in order to shorten recovery time."
+      },
+      {
+        "title": "Rehabilitation",
+        "text": "A structured process supported by physiotherapy and follow-up visits aims for a safe return to daily life and sport."
+      }
+    ]
+  },
+  "publications": {
+    "eyebrow": "Publications & Academic Work",
+    "title": "Scientific contributions",
+    "lead": "Alongside his clinical practice, he pursues active academic work, contributing to the orthopaedics and traumatology literature through publications in internationally indexed journals.",
+    "items": [
+      {
+        "year": "2025",
+        "title": "Long-term clinical comparison of three different femoral stems in Total Hip Arthroplasty with femoral shortening in patients with high-riding hips",
+        "venue": "Journal of Orthopaedic Surgery and Research"
+      },
+      {
+        "year": "2025",
+        "title": "The Montecranon classification — a comprehensive treatment strategy for complex proximal ulna fracture dislocations",
+        "venue": "JSES International"
+      },
+      {
+        "year": "2025",
+        "title": "Increased lateral, but not medial, posterior tibial slope is associated with early graft failure following anterior cruciate ligament reconstruction",
+        "venue": "BMC Musculoskeletal Disorders"
+      },
+      {
+        "year": "2023",
+        "title": "Effect of fracture level on the residual fracture gap during tibial intramedullary nailing for tibial shaft fractures",
+        "venue": "SICOT-J"
+      },
+      {
+        "year": "2022",
+        "title": "Overlapping repair and epitenon healing are more stable biomechanically than side to side repair and endotenon healing in achilles tendon lengthening with Z plasty",
+        "venue": "Foot and Ankle Surgery"
+      },
+      {
+        "year": "2021",
+        "title": "Leaving the stable ramp lesion unrepaired does not negatively affect clinical and functional outcomes as well as return to sports rates after ACL reconstruction",
+        "venue": "Knee Surgery, Sports Traumatology, Arthroscopy"
+      },
+      {
+        "year": "2020",
+        "title": "Early clinical and radiographic results of fixation with the TightRope device for Rockwood type V acromioclavicular joint dislocation: a retrospective review of 15 patients",
+        "venue": "Acta Orthopaedica et Traumatologica Turcica"
+      }
+    ]
+  },
+  "testimonials": {
+    "eyebrow": "Patient Reviews",
+    "title": "Highlights from patient reviews",
+    "lead": "The themes below summarise recurring points in patient reviews shared on online appointment platforms; they are not verbatim quotations.",
+    "rating": "5/5",
+    "ratingLabel": "Patient rating on DoktorTakvimi.com",
+    "themes": [
+      {
+        "title": "Thorough Information",
+        "text": "The most frequently highlighted point in patient reviews is the detailed information provided about the preoperative process and treatment alternatives."
+      },
+      {
+        "title": "Close Postoperative Follow-up",
+        "text": "The care and accessibility shown during follow-up appointments is another point that patients frequently emphasise."
+      },
+      {
+        "title": "Minimally Invasive Approach",
+        "text": "Reviews include positive feedback on how arthroscopic techniques shorten the recovery period."
+      },
+      {
+        "title": "Guidance Throughout Rehabilitation",
+        "text": "Patients with sports injuries in particular value the guidance provided during their return to sport and daily life."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Appointments and contact information",
+    "lead": "Consultation and surgery appointments are scheduled through the appointment systems of the public hospital where he practises.",
+    "workplaceName": "Metin Sabancı Baltalimanı Bone Diseases Training and Research Hospital",
+    "workplaceDept": "Department of Orthopaedics and Traumatology",
+    "address": "Baltalimanı Mah. Rumeli Hisarı Cad. No: 57/1, 34470 Sarıyer, Istanbul, Türkiye",
+    "phoneDisplay": "+90 212 323 70 75",
+    "appointmentNote": "Appointments can also be made via MHRS (Türkiye's Central Physician Appointment System) or by calling Alo 182."
+  },
+  "footer": {
+    "tagline": "Freedom of movement, in trusted hands.",
+    "legal": "This website is for informational purposes only and does not constitute medical advice. Please use the official hospital channels (MHRS / Alo 182) to book an appointment."
+  }
+}

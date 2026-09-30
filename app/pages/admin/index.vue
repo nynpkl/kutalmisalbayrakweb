@@ -33,22 +33,35 @@ const tabs = [
   { id: 'footer', label: 'Footer' }
 ]
 
+// Fotoğraf, bağlantı ve telefon gibi dilden bağımsız alanlar yalnızca Türkçe sekmesinde düzenlenir;
+// İngilizce site bunları Türkçe içerikten okur (app/composables/useSection.ts ile aynı liste).
+const SHARED_KEYS = ['photoUrl', 'scholarUrl', 'ratingUrl', 'rating', 'phoneHref', 'instagramHandle', 'instagramUrl', 'mapEmbedSrc', 'mapUrl']
+
 const activeTab = ref('hero')
-const content = reactive<Record<string, any>>(structuredClone(defaults))
+const lang = ref<'tr' | 'en'>('tr')
+const contents = reactive<Record<'tr' | 'en', Record<string, any>>>({
+  tr: structuredClone(defaults),
+  en: structuredClone(defaults)
+})
+// Şablondaki "content.<bölüm>.<alan>" bağlamaları seçili dilin içeriğini düzenler
+const content = computed(() => contents[lang.value])
 const status = reactive<Record<string, 'idle' | 'saving' | 'saved' | 'error'>>({})
 const uploading = ref(false)
 
 const { data } = await useFetch('/api/content')
 for (const key of Object.keys(defaults)) {
-  if (data.value?.[key]) {
-    Object.assign(content[key], data.value[key])
-  }
+  if (data.value?.[key]) Object.assign(contents.tr[key], data.value[key])
+  if (data.value?.[`${key}_en`]) Object.assign(contents.en[key], data.value[`${key}_en`])
 }
 
 async function saveSection(id: string) {
   status[id] = 'saving'
   try {
-    await $fetch(`/api/admin/content/${id}`, { method: 'PUT', body: content[id] })
+    const isEn = lang.value === 'en'
+    const body = isEn
+      ? Object.fromEntries(Object.entries(contents.en[id]).filter(([k]) => !SHARED_KEYS.includes(k)))
+      : contents.tr[id]
+    await $fetch(`/api/admin/content/${isEn ? `${id}_en` : id}`, { method: 'PUT', body })
     status[id] = 'saved'
     setTimeout(() => { if (status[id] === 'saved') status[id] = 'idle' }, 2500)
   } catch {
@@ -57,11 +70,11 @@ async function saveSection(id: string) {
 }
 
 function addItem(section: string, key: string, shape: Item) {
-  content[section][key].push({ ...shape })
+  content.value[section][key].push({ ...shape })
 }
 
 function removeItem(section: string, key: string, index: number) {
-  content[section][key].splice(index, 1)
+  content.value[section][key].splice(index, 1)
 }
 
 async function onPhotoChange(e: Event) {
@@ -74,7 +87,7 @@ async function onPhotoChange(e: Event) {
     const form = new FormData()
     form.append('file', file)
     const res = await $fetch<{ url: string }>('/api/admin/upload', { method: 'POST', body: form })
-    content.about.photoUrl = res.url
+    contents.tr.about.photoUrl = res.url
   } catch {
     alert('Fotoğraf yüklenemedi.')
   } finally {
@@ -93,9 +106,16 @@ async function logout() {
   <div class="admin">
     <aside class="admin__sidebar">
       <p class="admin__brand">KA — Yönetim</p>
+      <div class="admin__lang" role="group" aria-label="Düzenlenen dil">
+        <button type="button" :class="{ active: lang === 'tr' }" @click="lang = 'tr'">Türkçe</button>
+        <button type="button" :class="{ active: lang === 'en' }" @click="lang = 'en'">English</button>
+      </div>
+      <p v-if="lang === 'en'" class="admin__lang-note">
+        İngilizce içeriği düzenliyorsunuz. Fotoğraf, bağlantılar ve telefon gibi ortak alanlar Türkçe sekmesinden düzenlenir.
+      </p>
       <nav class="admin__nav">
         <button
-          v-for="tab in tabs"
+          v-for="tab in tabs.filter((t) => lang === 'tr' || t.id !== 'journal')"
           :key="tab.id"
           type="button"
           class="admin__nav-item"
@@ -106,7 +126,7 @@ async function logout() {
         </button>
       </nav>
       <div class="admin__sidebar-footer">
-        <a href="/" target="_blank" class="admin__view-site">Siteyi görüntüle →</a>
+        <a :href="lang === 'en' ? '/en' : '/'" target="_blank" class="admin__view-site">Siteyi görüntüle →</a>
         <button type="button" class="admin__logout" @click="logout">Çıkış Yap</button>
       </div>
     </aside>
@@ -132,20 +152,21 @@ async function logout() {
         <label>Başlık<input v-model="content.about.title" type="text" /></label>
         <label>Metin<textarea v-model="content.about.text" rows="6" /></label>
 
-        <label>Fotoğraf</label>
-        <div class="photo-row">
+        <label v-if="lang === 'tr'">Fotoğraf</label>
+        <div v-if="lang === 'tr'" class="photo-row">
           <img v-if="content.about.photoUrl" :src="content.about.photoUrl" class="photo-preview" alt="" />
           <input type="file" accept="image/*" :disabled="uploading" @change="onPhotoChange" />
           <span v-if="uploading">Yükleniyor…</span>
         </div>
 
-        <h3>Eğitim / Kariyer Zaman Çizelgesi</h3>
+        <h3>Akademik Yolculuk (Zaman Çizelgesi)</h3>
         <div v-for="(item, i) in content.about.timeline" :key="i" class="list-item">
-          <input v-model="item.year" placeholder="Yıl (örn. 2019–2022)" />
+          <input v-model="item.year" placeholder="Yıl (örn. 2019–2022)" style="max-width: 140px" />
+          <input v-model="item.title" placeholder="Başlık (örn. Ortopedi ve Travmatoloji İhtisası)" />
           <input v-model="item.text" placeholder="Açıklama" />
           <button type="button" class="remove" @click="removeItem('about', 'timeline', i)">Sil</button>
         </div>
-        <button type="button" class="add" @click="addItem('about', 'timeline', { year: '', text: '' })">+ Satır Ekle</button>
+        <button type="button" class="add" @click="addItem('about', 'timeline', { year: '', title: '', text: '' })">+ Satır Ekle</button>
 
         <button class="save" type="button" @click="saveSection('about')">Kaydet</button>
         <span class="status" :class="status.about">{{ status.about === 'saved' ? 'Kaydedildi ✓' : status.about === 'error' ? 'Hata oluştu' : '' }}</span>
@@ -209,7 +230,7 @@ async function logout() {
         <label>Üst etiket<input v-model="content.publications.eyebrow" type="text" /></label>
         <label>Başlık<input v-model="content.publications.title" type="text" /></label>
         <label>Açıklama<textarea v-model="content.publications.lead" rows="3" /></label>
-        <label>Google Scholar linki<input v-model="content.publications.scholarUrl" type="text" /></label>
+        <label v-if="lang === 'tr'">Google Scholar linki<input v-model="content.publications.scholarUrl" type="text" /></label>
 
         <h3>Yayın Listesi</h3>
         <div v-for="(item, i) in content.publications.items" :key="i" class="list-item list-item--stacked">
@@ -230,9 +251,9 @@ async function logout() {
         <label>Üst etiket<input v-model="content.testimonials.eyebrow" type="text" /></label>
         <label>Başlık<input v-model="content.testimonials.title" type="text" /></label>
         <label>Açıklama<textarea v-model="content.testimonials.lead" rows="3" /></label>
-        <label>Puan (örn. 5/5)<input v-model="content.testimonials.rating" type="text" /></label>
+        <label v-if="lang === 'tr'">Puan (örn. 5/5)<input v-model="content.testimonials.rating" type="text" /></label>
         <label>Puan açıklaması<input v-model="content.testimonials.ratingLabel" type="text" /></label>
-        <label>Değerlendirme platformu linki<input v-model="content.testimonials.ratingUrl" type="text" /></label>
+        <label v-if="lang === 'tr'">Değerlendirme platformu linki<input v-model="content.testimonials.ratingUrl" type="text" /></label>
 
         <h3>Öne Çıkan Temalar</h3>
         <div v-for="(item, i) in content.testimonials.themes" :key="i" class="list-item list-item--stacked">
@@ -256,12 +277,12 @@ async function logout() {
         <label>Görev yeri (bölüm)<input v-model="content.contact.workplaceDept" type="text" /></label>
         <label>Adres<input v-model="content.contact.address" type="text" /></label>
         <label>Telefon (görünen)<input v-model="content.contact.phoneDisplay" type="text" /></label>
-        <label>Telefon (arama linki, örn. +902123237075)<input v-model="content.contact.phoneHref" type="text" /></label>
+        <label v-if="lang === 'tr'">Telefon (arama linki, örn. +902123237075)<input v-model="content.contact.phoneHref" type="text" /></label>
         <label>Randevu notu<input v-model="content.contact.appointmentNote" type="text" /></label>
-        <label>Instagram kullanıcı adı<input v-model="content.contact.instagramHandle" type="text" /></label>
-        <label>Instagram linki<input v-model="content.contact.instagramUrl" type="text" /></label>
-        <label>Harita gömme linki (embed src)<input v-model="content.contact.mapEmbedSrc" type="text" /></label>
-        <label>Google Haritalar linki<input v-model="content.contact.mapUrl" type="text" /></label>
+        <label v-if="lang === 'tr'">Instagram kullanıcı adı<input v-model="content.contact.instagramHandle" type="text" /></label>
+        <label v-if="lang === 'tr'">Instagram linki<input v-model="content.contact.instagramUrl" type="text" /></label>
+        <label v-if="lang === 'tr'">Harita gömme linki (embed src)<input v-model="content.contact.mapEmbedSrc" type="text" /></label>
+        <label v-if="lang === 'tr'">Google Haritalar linki<input v-model="content.contact.mapUrl" type="text" /></label>
 
         <button class="save" type="button" @click="saveSection('contact')">Kaydet</button>
         <span class="status" :class="status.contact">{{ status.contact === 'saved' ? 'Kaydedildi ✓' : status.contact === 'error' ? 'Hata oluştu' : '' }}</span>
@@ -367,6 +388,37 @@ async function logout() {
   gap: 10px;
   padding-top: 16px;
   border-top: 1px solid rgba(244, 242, 236, 0.15);
+}
+
+.admin__lang {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.admin__lang button {
+  flex: 1;
+  padding: 8px 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.admin__lang button.active {
+  background: #098647;
+  border-color: #098647;
+  color: #fff;
+}
+
+.admin__lang-note {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.45;
+  opacity: 0.75;
 }
 
 .admin__view-site,

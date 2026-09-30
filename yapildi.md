@@ -152,6 +152,46 @@ Referans sitedeki (instrosenberg.ch) açılış ekranı incelendi: `pace.js` ile
 - `server/api/cron/keepalive.get.ts`: Veritabanına küçük bir sorgu atan uç nokta. `CRON_SECRET` ortam değişkeni tanımlıysa yalnızca `Authorization: Bearer <CRON_SECRET>` başlığıyla (Vercel Cron bunu otomatik ekler) çalışır.
 - `nuxt.config.ts` → `nitro.vercel.config.crons`: Vercel Cron her gün 05:00 UTC (08:00 TR) bu uç noktayı çağırır; proje hiçbir zaman 7 gün sessiz kalmaz.
 
+## 14. Tasarımın referans siteye (instrosenberg.ch) birebir uyarlanması
+
+Kullanıcının isteğiyle tasarım baştan değiştirildi: içerik aynı kaldı; yerleşim, renkler, yazı tipi, menü ve sayfa geçişleri referans siteyle aynı yapıldı.
+
+**Referans incelemesi (Playwright ile):** Sayfa yapısı, hesaplanan stiller (font boyutu, satır/harf aralığı, renkler), masaüstü/mobil görünüm, menü hover/aktif durumları, sayfa geçişi ve mobil menü incelendi.
+- Tek yazı tipi, beyaz zemin, siyah metin, yeşil vurgu `#098647`.
+- Referansın kullandığı lisanslı font (Requiem Display, typography.com) hesabı **devre dışı** ("DEACTIVATED") olduğundan site ziyaretçilerde tarayıcının varsayılan serif fontuyla — **Times** — görünüyor. Birebir görünüm için `Times, 'Times New Roman', Tinos, serif` kullanıldı (Tinos: Times ile aynı ölçülerde ücretsiz Google fontu; Times olmayan cihazlar için).
+- Ölçüler referansın CSS'inden alındı: sayfa başlığı 64,5px, bölüm başlığı 44,25px, menü 24,75px / harf aralığı 2,23px / büyük harf, büyük paragraf 25px; kırılma noktaları 744px / 1170px / 1440px; geniş alan 1278px, metin sütunu 846px.
+
+**Yapı — tek sayfadan çok sayfaya:** Referanstaki gibi her menü başlığı kendi sayfasına gidiyor: `/hakkimda`, `/uzmanlik`, `/yaklasim`, `/yayinlar`, `/yorumlar`, `/iletisim` (menü listesi `app/utils/siteNav.ts`). Sayfalar arası 0,375 sn'lik yumuşak geçiş (`pageTransition`).
+- `PageHero.vue`: Her sayfanın tam ekran açılışı — üstte isim logosu, ortada büyük başlık, alt sayfalarda yeşil alt çizgili sayfa adı, altta menü ve ince aşağı ok. Alt sayfaların başlığı/adı admin panelindeki ilgili bölümün "başlık" ve "üst başlık" alanlarından geliyor (admin panelinde değişiklik gerekmedi).
+- `MainNav.vue`: Menü bağlantıları — üzerine gelince ince siyah çizgi, aktif sayfada soldan dolan yeşil çizgi.
+- `TheHeader.vue`: Sağ üstte KA amblemi (mobilde solda); kaydırınca yukarıdan kayarak gelen sabit menü (beyaz geçişli arka plan); tablet/mobilde hamburger ve tam ekran beyaz menü.
+- `TheFooter.vue`: Referanstaki "VISIT ALSO" düzeninde "Diğer profiller: Google Scholar | Doktor Takvimi", küçük amblem, iletişim bilgileri, Instagram ikonu ve telif satırı.
+- Bölümler referansın yapı taşlarıyla yeniden yazıldı: yeşil çerçeveli hap düğme ("Randevu Al"), büyük harfli başlıklar, yeşil noktalı iki sütunlu liste (uzmanlık, eğitim-kariyer), numaralı iki sütunlu liste (yaklaşım), yeşil başlık + çizgili bloklar (rakamlar, uzmanlık detayı, yorum temaları, iletişim), koyu çerçeveli fotoğraf ve harita.
+- Ana sayfa: açılış → kısa hakkımda → uzmanlık listesi → "Rakamlarla." → yaklaşım → "Randevu Al" kapanışı.
+
+**Logo:** Kullanıcının eklediği yüksek çözünürlüklü logodan (`public/images/KA_logo_*_highres.png`) arka planı şeffaf, siyah ve beyaz sürümler üretildi (`public/images/logo/`): `ka-mark` (KA + dirsek amblemi), `ka-wordmark` (isim + çizgi + "Shoulder · Elbow · Sports Surgery"), `ka-lockup` (tamamı). Favicon ve Apple dokunmatik ikonu KA ambleminden üretildi.
+
+**Fotoğraf:** Hakkımda sayfasındaki fotoğraf, kullanıcının eklediği yeni profesyonel portreyle (`public/images/doktor-foto.png`, 1086×1448, sıkıştırılmadan) değiştirildi; çerçeve dikey 3:4 oldu. Supabase'deki `about.photoUrl` bu dosyayı gösterecek şekilde güncellendi. Üçüncü taraf dizin sitesinden alınmış eski fotoğraf (`kutalmis-albayrak.jpg`) kaldırıldı.
+
+**Akademik Yolculuk:** profdregemenaltan.com'un özgeçmiş kısmındaki "Akademik Yolculuk" bölümünün yapısı (solda nokta + dikey çizgi, yıl sütunu, sağda başlık + açıklama kartı, satırlar arasında ince çizgi) Hakkımda sayfasına, eski "Eğitim ve kariyer" listesinin yerine eklendi; renk/yazı tipi sitenin kendi diline (beyaz, Times, yeşil vurgu) uyarlandı, mobilde tek sütun. Zaman çizelgesi satırlarına **başlık** alanı eklendi (admin panelinde de yeni "Başlık" kutusu var); mevcut 6 satıra yalnızca var olan bilgilerden türetilen başlıklar yazıldı (kod yedeği, seed ve Supabase). Tablet/mobilde amblem ve menü düğmesinin arkasına, altından geçen metni gizleyen beyaz bir üst şerit eklendi.
+
+**Unvan:** Doktor doçent olduğu için sitedeki tüm "Op. Dr." ifadeleri "Doç. Dr." yapıldı (kod, sayfa başlığı/açıklaması, seed dosyası ve Supabase'deki `hero.kicker` alanı).
+
+**Kaldırılanlar:** Örnek (gerçek olmayan) blog yazılarını gösteren "Sağlık Notları" bölümü ve hiçbir yere gönderim yapmayan statik iletişim formu yeni tasarımda yer almıyor (admin panelindeki "Blog" verisi duruyor).
+
+## 15. İngilizce sürüm (TR / EN)
+
+Site iki dilli hale getirildi; site Türkçe açılır, sol üstteki **TR / EN** seçiciyle (referanstaki "EN" düğmesinin yerinde; tablet/mobilde menünün içinde) İngilizceye geçilir. Seçici, bulunulan sayfanın diğer dildeki karşılığına götürür.
+
+- **Adresler:** Türkçe `/`, `/hakkimda`, `/uzmanlik`, `/yaklasim`, `/yayinlar`, `/yorumlar`, `/iletisim`; İngilizce `/en`, `/en/about`, `/en/expertise`, `/en/approach`, `/en/publications`, `/en/reviews`, `/en/contact` (`app/utils/i18n.ts`). Ek bir i18n modülü kullanılmadı; dil adresten belirlenir (`app/composables/useLang.ts`).
+- **Arayüz metinleri** (menü, düğmeler, başlıklar, footer, erişilebilirlik etiketleri, sayfa başlığı/açıklaması) `app/utils/i18n.ts` içindeki sözlükte.
+- **İçerik:** Tüm içerik akademik/profesyonel bir dille İngilizceye çevrildi (`supabase/content-en.json`; ör. "Doç. Dr." → "Assoc. Prof. Dr.", hastane adı yayınlardaki resmi İngilizce karşılığıyla "Metin Sabancı Baltalimanı Bone Diseases Training and Research Hospital", MHRS → "Türkiye's Central Physician Appointment System"). Bu dosya Supabase'e `<bölüm>_en` satırları olarak yüklendi ve veritabanına ulaşılamazsa yedek içerik olarak kullanılıyor. `supabase/seed.mjs` de bu satırları yükleyecek şekilde güncellendi.
+- **Ortak alanlar:** Fotoğraf, Google Scholar / DoktorTakvimi bağlantıları, puan, arama numarası, Instagram ve harita bağlantıları dilden bağımsızdır; İngilizce site bunları Türkçe içerikten okur (`app/composables/useSection.ts`), böylece yalnızca bir kez girilir. Görünen telefon ve adres İngilizcede ayrıca (uluslararası biçimde) tutulur.
+- **`<html lang>`** sayfanın diline göre ayarlanır — bu, büyük harfe çevirmede İngilizce "i" harfinin "İ" olmaması için gereklidir. Arama motorları için `hreflang` (tr / en / x-default) bağlantıları eklendi.
+- **Admin paneli:** Kenar çubuğuna **Türkçe / English** geçişi eklendi. English seçiliyken aynı formlar İngilizce içeriği düzenler ve `<bölüm>_en` olarak kaydeder; ortak alanlar yalnızca Türkçe sekmesinde görünür. Blog sekmesi yalnızca Türkçede.
+
+- **İngilizce logo:** İngilizce sayfalarda isim logosu "ASSOC. PROF. DR. KUTALMIŞ ALBAYRAK" yazıyor. Font tahminiyle yeniden yazmak yerine, orijinal logodaki harflerin kendisi kullanıldı: "DR. KUTALMIŞ ALBAYRAK", A, O, R ve nokta birebir; S ve C, Ş ve Ç'nin çengelsiz halinden; logoda bulunmayan P, R'nin bacağı silinerek; F, L'nin dikey çevrilmesi ve orta kol eklenmesiyle aynı harf setinden türetildi. Harf/kelime aralıkları orijinaldeki gibi; çizgi isim uzunluğuna göre uzatıldı, "SHOULDER · ELBOW · SPORTS SURGERY" satırı birebir. Üretilen dosyalar: `public/images/logo/ka-wordmark-en-{black,white}.png`, `ka-lockup-en-{black,white}.png` ve yüksek çözünürlüklü `public/images/KA_logo_en_black_on_white_highres.png`, `KA_logo_en_white_on_dark_highres.png`. Sitede harf boyu Türkçeyle aynı kalsın diye logo genişliği oranında büyütülüyor (`PageHero.vue`, `--wordmark-ratio`).
+
 ## Sonraki adımlar (kullanıcıyla birlikte yapılacak)
 
 - [ ] Doktorun kendisiyle teyit: biyografideki tarihler/kurumlar, üyelikler ve yayın listesinin güncelliği.

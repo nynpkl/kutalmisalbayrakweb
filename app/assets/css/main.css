@@ -1,3 +1,7 @@
+/* Tasarım dili, referans site (instrosenberg.ch) ile birebir: beyaz zemin, siyah metin,
+   tek bir serif yazı tipi ve yeşil vurgu. Ölçüler (font boyutu, satır aralığı, harf aralığı,
+   kırılma noktaları 744px / 1170px / 1440px) referansın CSS'inden alınmıştır. */
+
 /* ---------- Reset ---------- */
 *,
 *::before,
@@ -28,6 +32,8 @@ button {
   color: inherit;
   background: none;
   border: 0;
+  border-radius: 0;
+  padding: 0;
   cursor: pointer;
 }
 
@@ -42,134 +48,224 @@ h3,
 h4,
 p {
   margin: 0;
+  font-weight: 400;
 }
 
-/* ---------- Design tokens ---------- */
+/* ---------- Tasarım değişkenleri ---------- */
 :root {
-  --color-bg: #faf7f2;
-  --color-surface: #ffffff;
-  --color-ink: #1b1c19;
-  --color-muted: #6f6d66;
-  --color-line: #e4dfd5;
-  --color-accent: #0f6f5c;
-  --color-accent-dark: #0b4f42;
-  --color-accent-soft: #e7efec;
+  --color-bg: #fff;
+  --color-ink: #000;
+  --color-green: #098647;
+  --color-line: rgba(0, 0, 0, 0.375);
+  --color-frame: #262626;
 
-  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Referans sitenin kullandığı font (Requiem Display) lisanslı olduğundan ve oradaki hesap
+     devre dışı olduğundan site tarayıcının varsayılan serif fontu Times ile görünüyor.
+     Birebir aynı görünüm için Times; olmayan cihazlarda ölçüleri aynı olan Tinos kullanılır. */
+  --font: Times, 'Times New Roman', Tinos, serif;
 
-  --container-max: 1320px;
-  --gutter: clamp(20px, 5vw, 64px);
+  /* İçerik genişlikleri (1440px'te referansla aynı: geniş alan 1278px, metin sütunu 846px) */
+  --wide: min(1278px, 88.75vw);
+  --text: min(846px, 88.75vw);
+  --list: min(1062px, 88.75vw);
 
-  --section-space: clamp(72px, 10vw, 160px);
-}
-
-html.dark-theme {
-  --color-bg: #10130f;
-  --color-surface: #171a15;
-  --color-ink: #f3f1ea;
-  --color-muted: #9a9990;
-  --color-line: #2b2e27;
-  --color-accent: #3fbf9f;
-  --color-accent-dark: #7fd9c2;
-  --color-accent-soft: #1b2620;
+  --ease: 0.375s;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-ink);
-  font-family: var(--font-body);
+  font-family: var(--font);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* ---------- Layout helpers ---------- */
-.container {
-  max-width: var(--container-max);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
-
-.section {
-  padding-block: var(--section-space);
-  position: relative;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-body);
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
-
-.eyebrow::before {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: currentColor;
-}
-
-.section-title {
-  font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-  font-size: clamp(32px, 4.4vw, 56px);
-  margin-top: 18px;
-}
-
-.section-lead {
-  font-size: clamp(16px, 1.4vw, 19px);
-  color: var(--color-muted);
-  line-height: 1.6;
-  max-width: 640px;
-  margin-top: 20px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px 30px;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  border-radius: 2px;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background: var(--color-accent);
+::selection {
+  background: var(--color-green);
   color: #fff;
 }
 
-.btn-primary:hover {
-  background: var(--color-accent-dark);
-  transform: translateY(-2px);
+/* ---------- Tipografi (referanstaki sınıf adlarıyla) ---------- */
+.t-carousel-title {
+  font-size: 46px;
+  line-height: 44px;
+  letter-spacing: -0.46px;
 }
 
-.btn-ghost {
-  border: 1px solid currentColor;
-  color: var(--color-ink);
+.t-title {
+  font-size: 34px;
+  line-height: 40px;
 }
 
-html.dark-theme .btn-ghost:hover,
-.btn-ghost:hover {
-  background: var(--color-ink);
-  color: var(--color-bg);
+.t-main-menu {
+  font-size: 21.5px;
+  line-height: 32.25px;
+  letter-spacing: -0.0002em;
+  text-transform: uppercase;
 }
 
+.t-text-big {
+  font-size: 20.5px;
+  line-height: 1.365;
+}
+
+.t-text {
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+.t-list {
+  font-size: 15.5px;
+  line-height: 22px;
+}
+
+.t-result-title {
+  font-size: 21px;
+  line-height: 1.32;
+  letter-spacing: 0.0045em;
+}
+
+.t-result-text {
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.02em;
+}
+
+.t-footer {
+  font-size: 14px;
+  line-height: 1.38;
+  letter-spacing: 0.01em;
+}
+
+.t-mini {
+  font-size: 11px;
+  line-height: 13px;
+  letter-spacing: 0.0015em;
+}
+
+@media (min-width: 744px) {
+  .t-carousel-title {
+    font-size: 53px;
+    line-height: 0.95;
+    letter-spacing: -0.53px;
+  }
+
+  .t-title {
+    font-size: 44.25px;
+    line-height: 53px;
+  }
+
+  .t-text-big {
+    letter-spacing: -0.0002em;
+    line-height: 27px;
+  }
+
+  .t-footer {
+    font-size: 14.25px;
+    line-height: 21px;
+  }
+}
+
+@media (min-width: 1170px) {
+  .t-carousel-title {
+    font-size: 64.5px;
+    line-height: 65px;
+    letter-spacing: 0;
+  }
+
+  .t-main-menu {
+    font-size: 24.75px;
+    letter-spacing: 2.23px;
+  }
+
+  .t-text-big {
+    font-size: 25px;
+    line-height: 1.32;
+    letter-spacing: 0.0045em;
+  }
+
+  .t-text {
+    font-size: 16px;
+  }
+
+  .t-list {
+    font-size: 17.25px;
+    line-height: 23.98px;
+  }
+
+  .t-result-title {
+    font-size: 25px;
+    line-height: 33px;
+    letter-spacing: 0.1125px;
+  }
+
+  .t-result-text {
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.36px;
+  }
+
+  .t-footer {
+    line-height: 1.53;
+  }
+
+  .t-mini {
+    font-size: 11.25px;
+    line-height: 11px;
+    letter-spacing: -0.0002em;
+  }
+}
+
+/* ---------- Yerleşim ---------- */
+.wrap-wide,
+.wrap-text,
+.wrap-list {
+  margin-inline: auto;
+}
+
+.wrap-wide {
+  width: var(--wide);
+}
+
+.wrap-text {
+  width: var(--text);
+}
+
+.wrap-list {
+  width: var(--list);
+}
+
+.center {
+  text-align: center;
+}
+
+/* Başlık alanından sonraki içerik */
+.page-body {
+  padding-top: 110px;
+}
+
+@media (min-width: 1170px) {
+  .page-body {
+    padding-top: 150px;
+  }
+}
+
+/* Bölümler arası dikey boşluklar */
+.block {
+  margin-top: 90px;
+}
+
+@media (min-width: 1170px) {
+  .block {
+    margin-top: 120px;
+  }
+}
+
+/* ---------- Bağlantı alt çizgileri ---------- */
+/* Üzerine gelince ortalanmış ince siyah çizgi belirir (opacity), aktif bağlantıda yeşil çizgi soldan dolar. */
 .link-underline {
   position: relative;
 }
@@ -177,22 +273,172 @@ html.dark-theme .btn-ghost:hover,
 .link-underline::after {
   content: '';
   position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
+  left: 50%;
+  bottom: 0;
+  width: 110%;
   height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s ease;
+  background-color: var(--color-line);
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity var(--ease);
 }
 
 .link-underline:hover::after {
-  transform: scaleX(1);
+  opacity: 1;
 }
 
-@media (max-width: 900px) {
-  :root {
-    --section-space: clamp(56px, 14vw, 96px);
+/* Metin içindeki yeşil alt çizgili vurgu (referanstaki "underlined") */
+.underlined {
+  position: relative;
+  text-transform: uppercase;
+}
+
+.underlined::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 110%;
+  height: 1px;
+  background-color: var(--color-green);
+  transform: translateX(-50%);
+}
+
+/* ---------- Butonlar ---------- */
+/* "Apply Now" düğmesinin karşılığı: yeşil ince çerçeveli hap düğme */
+.btn {
+  display: inline-block;
+  min-width: 242px;
+  padding: 5px 30px 4px;
+  border: 1px solid var(--color-green);
+  border-radius: 20px;
+  color: var(--color-green);
+  font-size: 16px;
+  line-height: 21px;
+  letter-spacing: 0;
+  text-align: center;
+  transition: background-color var(--ease), color var(--ease);
+}
+
+.btn:hover {
+  background-color: var(--color-green);
+  color: #fff;
+}
+
+@media (min-width: 1170px) {
+  .btn {
+    font-size: 20px;
+    letter-spacing: 0.41px;
+    padding: 5px 30px 5px;
   }
+}
+
+/* ---------- Madde işaretli liste (yeşil nokta) ---------- */
+.dot-list li {
+  position: relative;
+  padding-left: 12px;
+}
+
+.dot-list li::before {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: 9px;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background-color: var(--color-green);
+}
+
+@media (min-width: 1170px) {
+  .dot-list li::before {
+    top: 14px;
+    width: 3px;
+    height: 3px;
+  }
+}
+
+.dot-list strong {
+  font-weight: 700;
+}
+
+/* ---------- Yeşil başlıklı sonuç blokları (referanstaki "Results that Speak Volumes") ---------- */
+.result + .result {
+  margin-top: 44px;
+}
+
+.result__title {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-green);
+  color: var(--color-green);
+  text-align: center;
+  font-weight: 700;
+}
+
+.result__text {
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* ---------- Numaralı iki sütunlu liste (referanstaki "1. Age-Neutral Learning: ...") ---------- */
+.num-list {
+  columns: 2;
+  column-gap: 70px;
+}
+
+.num-list li {
+  break-inside: avoid;
+}
+
+.num-list li + li {
+  margin-top: 0;
+}
+
+.num-list strong {
+  font-weight: 700;
+}
+
+@media (max-width: 743px) {
+  .num-list {
+    columns: 1;
+  }
+}
+
+/* ---------- Koyu çerçeveli görsel (referanstaki fotoğraf bantları) ---------- */
+.frame {
+  background: var(--color-frame);
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 744px) {
+  .frame {
+    padding: 16px 18px;
+  }
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Sayfa geçişi (referanstaki page-fade) ---------- */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity var(--ease);
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
 }

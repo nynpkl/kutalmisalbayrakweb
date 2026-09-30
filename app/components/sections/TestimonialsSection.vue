@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import { Navigation } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-
-import 'swiper/css'
-import 'swiper/css/navigation'
-
 const fallback = {
   eyebrow: 'Hasta Değerlendirmeleri',
   title: 'Hasta değerlendirmelerinde öne çıkanlar',
@@ -32,121 +26,47 @@ const fallback = {
   ]
 }
 
-const { data } = await useSiteContent()
-const testimonials = computed(() => ({ ...fallback, ...(data.value?.testimonials ?? {}) }))
+const testimonials = await useSection('testimonials', fallback)
+const { t, pathTo } = useLang()
 </script>
 
 <template>
-  <section id="yorumlar" class="section testimonials">
-    <div class="container">
-      <p class="eyebrow">{{ testimonials.eyebrow }}</p>
-      <h2 class="section-title">{{ testimonials.title }}</h2>
-      <p class="section-lead">{{ testimonials.lead }}</p>
-
-      <div class="testimonials__rating">
-        <span class="testimonials__rating-score">{{ testimonials.rating }}</span>
-        <div>
-          <p class="testimonials__rating-label">{{ testimonials.ratingLabel }}</p>
-          <a
-            :href="testimonials.ratingUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link-underline"
-          >
-            Tüm hasta değerlendirmelerini görüntüle →
-          </a>
-        </div>
-      </div>
-
-      <Swiper
-        class="testimonials__slider"
-        :modules="[Navigation]"
-        :navigation="{ nextEl: '.t-next', prevEl: '.t-prev' }"
-        :space-between="32"
-        :slides-per-view="1"
-        :breakpoints="{
-          760: { slidesPerView: 2 },
-          1180: { slidesPerView: 3 }
-        }"
+  <section class="testimonials">
+    <div class="center">
+      <p class="testimonials__score t-carousel-title">{{ testimonials.rating }}</p>
+      <p class="testimonials__label t-main-menu">{{ testimonials.ratingLabel }}</p>
+      <a
+        :href="testimonials.ratingUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn testimonials__btn"
       >
-        <SwiperSlide v-for="theme in testimonials.themes" :key="theme.title">
-          <article class="testimonial-card">
-            <h3 class="testimonial-card__title">{{ theme.title }}</h3>
-            <p class="testimonial-card__text">{{ theme.text }}</p>
-          </article>
-        </SwiperSlide>
-      </Swiper>
+        {{ t('viewAllReviews') }}
+      </a>
+    </div>
 
-      <div class="testimonials__nav">
-        <button class="t-prev" type="button" aria-label="Önceki">←</button>
-        <button class="t-next" type="button" aria-label="Sonraki">→</button>
+    <p class="t-text-big wrap-text block">{{ testimonials.lead }}</p>
+
+    <div class="wrap-text block">
+      <div v-for="theme in testimonials.themes" :key="theme.title" class="result">
+        <h3 class="result__title t-result-title">{{ theme.title }}</h3>
+        <p class="result__text t-result-text">{{ theme.text }}</p>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.testimonials__rating {
+.testimonials__score {
+  color: var(--color-green);
+}
+
+.testimonials__label {
+  width: var(--text);
+  margin: 28px auto 0;
+}
+
+.testimonials__btn {
   margin-top: 40px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.testimonials__rating-score {
-  font-family: var(--font-display);
-  font-size: 44px;
-  color: var(--color-accent);
-}
-
-.testimonials__rating-label {
-  font-size: 14px;
-  color: var(--color-muted);
-  margin-bottom: 4px;
-}
-
-.testimonials__slider {
-  margin-top: 40px;
-  padding-bottom: 4px;
-}
-
-.testimonial-card {
-  height: 100%;
-  border: 1px solid var(--color-line);
-  padding: 36px 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-height: 220px;
-}
-
-.testimonial-card__title {
-  font-family: var(--font-display);
-  font-size: 22px;
-}
-
-.testimonial-card__text {
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--color-muted);
-}
-
-.testimonials__nav {
-  margin-top: 28px;
-  display: flex;
-  gap: 14px;
-}
-
-.testimonials__nav button {
-  width: 46px;
-  height: 46px;
-  border: 1px solid var(--color-line);
-  border-radius: 50%;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.testimonials__nav button:hover {
-  background: var(--color-accent);
-  color: #fff;
 }
 </style>

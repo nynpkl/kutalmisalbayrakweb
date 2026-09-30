@@ -8,69 +8,25 @@ const fallback = {
   ]
 }
 
-const { data } = await useSiteContent()
-const stats = computed(() => ({ ...fallback, ...(data.value?.stats ?? {}) }))
+const stats = await useSection('stats', fallback)
+const { t, pathTo } = useLang()
 </script>
 
 <template>
-  <section class="section stats">
-    <div class="container stats__grid">
-      <div v-for="stat in stats.items" :key="stat.label" class="stats__item">
-        <span class="stats__value">{{ stat.value }}</span>
-        <span class="stats__label">{{ stat.label }}</span>
+  <!-- Referanstaki "Results that Speak Volumes." bölümünün karşılığı -->
+  <section class="stats">
+    <h2 class="t-title center wrap-text">{{ t('byNumbers') }}</h2>
+    <div class="wrap-text stats__list">
+      <div v-for="item in stats.items" :key="item.label" class="result">
+        <h3 class="result__title t-result-title">{{ item.value }}</h3>
+        <p class="result__text t-result-text">{{ item.label }}</p>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.stats {
-  background: var(--color-ink);
-  color: #f4f2ec;
-  padding-block: clamp(56px, 8vw, 100px);
-}
-
-.stats__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-}
-
-@media (min-width: 800px) {
-  .stats__grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.stats__item {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: center;
-  border-left: 1px solid rgba(244, 242, 236, 0.15);
-  padding-left: 20px;
-}
-
-.stats__item:first-child {
-  border-left: none;
-}
-
-@media (max-width: 799px) {
-  .stats__item:nth-child(odd) {
-    border-left: none;
-  }
-}
-
-.stats__value {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 5vw, 56px);
-  color: #7fd9c2;
-}
-
-.stats__label {
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: rgba(244, 242, 236, 0.65);
-  text-transform: uppercase;
+.stats__list {
+  margin-top: 80px;
 }
 </style>

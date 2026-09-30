@@ -25,7 +25,7 @@ async function onSubmit() {
   <div class="login">
     <form class="login__card" @submit.prevent="onSubmit">
       <p class="login__eyebrow">Yönetim Paneli</p>
-      <h1 class="login__title">Op. Dr. Kutalmış Albayrak</h1>
+      <h1 class="login__title">Doç. Dr. Kutalmış Albayrak</h1>
       <div class="login__field">
         <label for="password">Şifre</label>
         <input id="password" v-model="password" type="password" autofocus required />
@@ -46,6 +46,7 @@ async function onSubmit() {
   justify-content: center;
   background: #10130f;
   padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .login__card {
@@ -68,7 +69,7 @@ async function onSubmit() {
 }
 
 .login__title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Times, 'Times New Roman', Tinos, serif;
   font-size: 26px;
   color: #f3f1ea;
   margin-bottom: 20px;

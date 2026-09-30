@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// Referanstaki footer: "VISIT ALSO" başlığı altında iki büyük bağlantı, küçük amblem,
+// ortalanmış iletişim bilgileri, sosyal medya ikonu ve en altta küçük telif satırı.
 const year = new Date().getFullYear()
 
 const fallback = {
@@ -7,152 +9,160 @@ const fallback = {
 }
 
 const contactFallback = {
+  workplaceName: 'Metin Sabancı Baltalimanı Kemik Hastalıkları Eğitim ve Araştırma Hastanesi',
+  address: 'Baltalimanı Mah. Rumeli Hisarı Cad. No: 57/1, 34470 Sarıyer / İstanbul',
   phoneDisplay: '0 (212) 323 70 75',
   phoneHref: '+902123237075',
   instagramHandle: '@drkutalmisalbayrak',
   instagramUrl: 'https://www.instagram.com/drkutalmisalbayrak/'
 }
 
-const { data } = await useSiteContent()
-const footer = computed(() => ({ ...fallback, ...(data.value?.footer ?? {}) }))
-const contact = computed(() => ({ ...contactFallback, ...(data.value?.contact ?? {}) }))
+const publicationsFallback = {
+  scholarUrl: 'https://scholar.google.com/citations?user=_pwBOwsAAAAJ&hl=tr'
+}
 
-const navLinks = [
-  { label: 'Hakkımda', href: '#hakkimda' },
-  { label: 'Uzmanlık Alanları', href: '#uzmanlik' },
-  { label: 'Yaklaşımım', href: '#yaklasim' },
-  { label: 'Yayınlar', href: '#yayinlar' }
-]
+const testimonialsFallback = {
+  ratingUrl: 'https://www.doktortakvimi.com/kutalmis-albayrak/ortopedi-ve-travmatoloji/istanbul'
+}
+
+const { data } = await useSiteContent()
+const footer = await useSection('footer', fallback)
+const contact = await useSection('contact', contactFallback)
+const { t } = useLang()
+const scholarUrl = computed(() => data.value?.publications?.scholarUrl || publicationsFallback.scholarUrl)
+const ratingUrl = computed(() => data.value?.testimonials?.ratingUrl || testimonialsFallback.ratingUrl)
 </script>
 
 <template>
-  <footer class="footer">
-    <div class="container footer__top">
-      <div class="footer__brand">
-        <span class="footer__mark">KA</span>
-        <p class="footer__tagline">{{ footer.tagline }}</p>
-      </div>
+  <footer class="footer t-footer">
+    <p class="footer__visit-title t-main-menu">{{ t('footer.otherProfiles') }}</p>
 
-      <div class="footer__columns">
-        <div class="footer__col">
-          <h3>Gezinme</h3>
-          <ul>
-            <li v-for="link in navLinks" :key="link.label">
-              <a :href="link.href" class="link-underline">{{ link.label }}</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="footer__col">
-          <h3>İletişim</h3>
-          <ul>
-            <li><a :href="`tel:${contact.phoneHref}`" class="link-underline">{{ contact.phoneDisplay }}</a></li>
-            <li><a href="#iletisim" class="link-underline">Adres ve harita</a></li>
-          </ul>
-        </div>
-
-        <div class="footer__col">
-          <h3>Sosyal Medya</h3>
-          <ul>
-            <li>
-              <a :href="contact.instagramUrl" target="_blank" rel="noopener noreferrer" class="link-underline">
-                {{ contact.instagramHandle }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <div class="footer__visit">
+      <a :href="scholarUrl" target="_blank" rel="noopener noreferrer" class="footer__big-link">
+        <span>Google</span>
+        <span>Scholar</span>
+      </a>
+      <span class="footer__divider" aria-hidden="true" />
+      <a :href="ratingUrl" target="_blank" rel="noopener noreferrer" class="footer__big-link">
+        <span>Doktor</span>
+        <span>Takvimi</span>
+      </a>
     </div>
 
-    <div class="container footer__legal">
-      <p>© {{ year }} Op. Dr. Kutalmış Albayrak. Tüm hakları saklıdır.</p>
-      <p class="footer__disclaimer">{{ footer.legal }}</p>
+    <div class="footer__info">
+      <img class="footer__mark" src="/images/logo/ka-mark-black.png" alt="" width="720" height="615" />
+      <p>{{ t('doctor') }}</p>
+      <p>{{ contact.workplaceName }}</p>
+      <p>{{ contact.address }}</p>
+      <p><a :href="`tel:${contact.phoneHref}`" class="link-underline">{{ contact.phoneDisplay }}</a></p>
+    </div>
+
+    <div class="footer__social">
+      <a
+        :href="contact.instagramUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer__icon"
+        :aria-label="`Instagram: ${contact.instagramHandle}`"
+      >
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M3 3h18v18H3V3zm2 2v14h14V5H5zm7 3.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zm0 2a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM16.6 6.3a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"
+          />
+        </svg>
+      </a>
+    </div>
+
+    <div class="footer__legal t-mini">
+      <p>© {{ year }} {{ t('doctor') }}, {{ t('footer.rights') }}</p>
+      <p>{{ footer.legal }}</p>
     </div>
   </footer>
 </template>
 
 <style scoped>
 .footer {
-  background: var(--color-ink);
-  color: rgba(244, 242, 236, 0.85);
-  padding-top: clamp(56px, 8vw, 96px);
+  margin-top: 140px;
+  padding-bottom: 60px;
+  text-align: center;
 }
 
-.footer__top {
+.footer__visit-title {
+  margin-bottom: 48px;
+}
+
+.footer__visit {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* Referanstaki "The Rosenberg Journal" logosunu andıran, satır altları yeşil çizgili büyük bağlantılar */
+.footer__big-link {
   display: flex;
   flex-direction: column;
-  gap: 48px;
-  padding-bottom: 56px;
-  border-bottom: 1px solid rgba(244, 242, 236, 0.15);
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 40px;
+  font-size: 30px;
+  line-height: 1.2;
+  text-align: left;
 }
 
-@media (min-width: 900px) {
-  .footer__top {
-    flex-direction: row;
-    justify-content: space-between;
+.footer__big-link span {
+  border-bottom: 1px solid rgba(9, 134, 71, 0.55);
+  transition: border-color var(--ease);
+}
+
+.footer__big-link:hover span {
+  border-color: var(--color-green);
+}
+
+@media (min-width: 1170px) {
+  .footer__big-link {
+    padding: 0 80px;
+    font-size: 38px;
   }
 }
 
-.footer__brand {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 320px;
+.footer__divider {
+  width: 1px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.footer__info {
+  margin-top: 130px;
 }
 
 .footer__mark {
-  font-family: var(--font-display);
-  font-size: 28px;
-  color: #7fd9c2;
+  width: 34px;
+  height: auto;
+  margin: 0 auto 18px;
 }
 
-.footer__tagline {
-  font-family: var(--font-display);
-  font-size: 20px;
-  color: rgba(244, 242, 236, 0.9);
-}
-
-.footer__columns {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-}
-
-@media (min-width: 560px) {
-  .footer__columns {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 60px;
-  }
-}
-
-.footer__col h3 {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #7fd9c2;
-  margin-bottom: 18px;
-}
-
-.footer__col ul {
+.footer__social {
+  margin-top: 50px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-size: 14px;
+  justify-content: center;
+}
+
+.footer__icon {
+  line-height: 0;
+  transition: color var(--ease);
+}
+
+.footer__icon:hover {
+  color: var(--color-green);
 }
 
 .footer__legal {
-  padding-block: 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12.5px;
-  color: rgba(244, 242, 236, 0.55);
+  width: min(560px, 88vw);
+  margin: 70px auto 0;
 }
 
-@media (min-width: 900px) {
-  .footer__legal {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+.footer__legal p + p {
+  margin-top: 6px;
 }
 </style>

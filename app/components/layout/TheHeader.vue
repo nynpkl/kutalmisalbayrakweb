@@ -1,292 +1,324 @@
 <script setup lang="ts">
-const links = [
-  { label: 'Anasayfa', href: '#hero' },
-  { label: 'Hakkımda', href: '#hakkimda' },
-  { label: 'Uzmanlık Alanları', href: '#uzmanlik' },
-  { label: 'Yaklaşımım', href: '#yaklasim' },
-  { label: 'Yayınlar', href: '#yayinlar' },
-  { label: 'Hasta Yorumları', href: '#yorumlar' }
-]
+// Referanstaki sabit öğeler: sağ üstte amblem (mobilde solda), sayfanın üst kısmındaki menü
+// kaydırılıp ekrandan çıkınca yukarıdan kayarak gelen sabit menü, mobilde hamburger + tam ekran menü.
+const route = useRoute()
+const { t, nav, pathTo } = useLang()
 
+const showFixedNav = ref(false)
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
 
-function onScroll() {
-  isScrolled.value = window.scrollY > 40
-}
-
-function closeMenu() {
-  isMenuOpen.value = false
+function update() {
+  isScrolled.value = window.scrollY > 10
+  // Sayfa başlığının altındaki menü ekranın üst kısmına ulaştığında sabit menüyü göster
+  const heroNav = document.querySelector('.page-hero__nav')
+  showFixedNav.value = heroNav ? heroNav.getBoundingClientRect().top < 60 : window.scrollY > 120
 }
 
 watch(isMenuOpen, (open) => {
   document.documentElement.style.overflow = open ? 'hidden' : ''
 })
 
+watch(
+  () => route.fullPath,
+  () => {
+    isMenuOpen.value = false
+    // Sayfa geçişi (out-in) bittikten sonra yeniden hesapla
+    setTimeout(update, 800)
+  }
+)
+
 onMounted(() => {
-  window.addEventListener('scroll', onScroll, { passive: true })
+  update()
+  window.addEventListener('scroll', update, { passive: true })
+  window.addEventListener('resize', update, { passive: true })
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('scroll', update)
+  window.removeEventListener('resize', update)
   document.documentElement.style.overflow = ''
 })
 </script>
 
 <template>
-  <header class="header" :class="{ 'header--solid': isScrolled }">
-    <div class="header__inner container">
-      <a href="#hero" class="brand link-underline" @click="closeMenu">
-        <span class="brand__mark">KA</span>
-        <span class="brand__name">Op. Dr. Kutalmış Albayrak</span>
-      </a>
-
-      <nav class="nav-desktop">
-        <a v-for="link in links" :key="link.href" :href="link.href" class="nav-link link-underline">
-          {{ link.label }}
-        </a>
-      </nav>
-
-      <div class="header__actions">
-        <a href="#iletisim" class="btn btn-primary nav-cta">İletişim</a>
-        <button
-          class="burger"
-          :class="{ 'burger--open': isMenuOpen }"
-          type="button"
-          :aria-expanded="isMenuOpen"
-          aria-label="Menüyü aç/kapat"
-          @click="isMenuOpen = !isMenuOpen"
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-      </div>
+  <header class="site-header">
+    <!-- Kaydırınca yukarıdan gelen sabit menü (masaüstü) -->
+    <div class="fixed-nav" :class="{ 'fixed-nav--visible': showFixedNav }">
+      <MainNav />
     </div>
 
-    <Transition name="fade">
-      <div v-if="isMenuOpen" class="mobile-menu">
-        <nav class="mobile-menu__links">
-          <a
-            v-for="(link, i) in links"
-            :key="link.href"
-            :href="link.href"
-            class="mobile-menu__link"
-            :style="{ transitionDelay: `${i * 40}ms` }"
-            @click="closeMenu"
-          >
-            {{ link.label }}
-          </a>
+    <!-- Tablet/mobilde amblem ve menü düğmesinin arkasında, altından geçen metni gizleyen beyaz şerit -->
+    <div class="mobile-bar" :class="{ 'mobile-bar--visible': isScrolled }" aria-hidden="true" />
+
+    <!-- Dil seçici (masaüstünde sol üstte; tablet/mobilde menünün içinde) -->
+    <LangSwitch class="lang-desktop" />
+
+    <!-- Amblem -->
+    <NuxtLink :to="pathTo('home')" class="crest" :aria-label="t('a11y.home')">
+      <img src="/images/logo/ka-mark-black.png" :alt="t('doctor')" width="720" height="615" />
+    </NuxtLink>
+
+    <!-- Hamburger (tablet/mobil) -->
+    <button
+      class="burger"
+      :class="{ 'burger--close': isMenuOpen }"
+      :aria-expanded="isMenuOpen"
+      aria-controls="mobile-menu"
+      :aria-label="isMenuOpen ? t('a11y.closeMenu') : t('a11y.openMenu')"
+      @click="isMenuOpen = !isMenuOpen"
+    >
+      <span class="burger__line burger__line--1" />
+      <span class="burger__line burger__line--2" />
+      <span class="burger__line burger__line--3" />
+    </button>
+
+    <!-- Tam ekran mobil menü -->
+    <Transition name="menu-fade">
+      <div v-show="isMenuOpen" id="mobile-menu" class="mobile-menu">
+        <LangSwitch class="mobile-menu__lang" />
+        <nav class="mobile-menu__links t-main-menu" :aria-label="t('a11y.mainMenu')">
+          <NuxtLink :to="pathTo('home')" class="mobile-menu__link">{{ t('nav.home') }}</NuxtLink>
+          <NuxtLink v-for="item in nav" :key="item.key" :to="item.to" class="mobile-menu__link">
+            {{ item.label }}
+          </NuxtLink>
         </nav>
-        <a href="#iletisim" class="btn btn-primary" @click="closeMenu">İletişim</a>
-        <p class="mobile-menu__meta">Baltalimanı Mah. Rumeli Hisarı Cd. No: 57/1, Sarıyer / İstanbul<br />0 (212) 323 70 75</p>
       </div>
     </Transition>
   </header>
 </template>
 
 <style scoped>
-.header {
+/* ---------- Sabit menü ---------- */
+.fixed-nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
-  padding-block: 22px;
-  background: linear-gradient(180deg, rgba(250, 247, 242, 0.9), transparent);
-  transition: background-color 0.35s ease, padding 0.35s ease, box-shadow 0.35s ease;
-}
-
-.header--solid {
-  background: var(--color-bg);
-  padding-block: 14px;
-  box-shadow: 0 1px 0 var(--color-line);
-}
-
-.header__inner {
+  z-index: 50;
+  height: 100px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.brand {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.brand__mark {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent);
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(180deg, #fff 0, #fff 82.5%, hsla(0, 0%, 100%, 0));
+  transform: translate3d(0, -100%, 0);
+  transition: transform var(--ease);
 }
 
-.brand__name {
-  font-family: var(--font-display);
-  font-size: 18px;
-  letter-spacing: 0.01em;
-  display: none;
+.fixed-nav--visible {
+  transform: translate3d(0, 0, 0);
 }
 
-@media (min-width: 640px) {
-  .brand__name {
-    display: inline;
+@media (min-width: 1440px) {
+  .fixed-nav {
+    height: 120px;
   }
 }
 
-.nav-desktop {
-  display: none;
-  align-items: center;
-  gap: clamp(12px, 1.4vw, 22px);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  flex-shrink: 1;
-  min-width: 0;
-}
-
-.nav-link {
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-@media (min-width: 1320px) {
-  .nav-desktop {
-    display: flex;
+@media (max-width: 1169px) {
+  .fixed-nav {
+    display: none;
   }
 }
 
-.header__actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-shrink: 0;
+/* ---------- Dil seçici ---------- */
+.lang-desktop {
+  position: fixed;
+  z-index: 60;
+  top: 38px;
+  left: 44px;
 }
 
-.nav-cta {
-  display: none;
-}
-
-@media (min-width: 1320px) {
-  .nav-cta {
-    display: inline-flex;
+@media (min-width: 1440px) {
+  .lang-desktop {
+    top: 45px;
+    left: 55px;
   }
 }
 
+@media (max-width: 1169px) {
+  .lang-desktop {
+    display: none;
+  }
+}
+
+/* ---------- Mobil üst şerit ---------- */
+.mobile-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 55;
+  height: 96px;
+  background: linear-gradient(180deg, #fff 0, #fff 75%, hsla(0, 0%, 100%, 0));
+  pointer-events: none;
+  /* Sayfanın en üstünde isim logosunu örtmesin; yalnızca kaydırınca belirsin */
+  opacity: 0;
+  transition: opacity var(--ease);
+}
+
+.mobile-bar--visible {
+  opacity: 1;
+}
+
+@media (min-width: 1170px) {
+  .mobile-bar {
+    display: none;
+  }
+}
+
+/* ---------- Amblem ---------- */
+.crest {
+  position: fixed;
+  z-index: 70;
+  top: 30px;
+  left: 3vw;
+  width: 42px;
+}
+
+.crest img {
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 744px) {
+  .crest {
+    left: 35px;
+  }
+}
+
+@media (min-width: 1170px) {
+  .crest {
+    left: auto;
+    right: 48px;
+    top: 22px;
+    width: 58px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .crest {
+    top: 30px;
+  }
+}
+
+/* ---------- Hamburger ---------- */
 .burger {
-  position: relative;
-  width: 26px;
-  height: 18px;
-  z-index: 3;
+  position: fixed;
+  z-index: 70;
+  top: 36px;
+  right: 3vw;
+  display: block;
+  width: 28px;
+  height: 21px;
+  transition: transform var(--ease);
 }
 
-@media (min-width: 1320px) {
+@media (min-width: 744px) {
+  .burger {
+    right: 35px;
+    width: 35px;
+    height: 27px;
+  }
+}
+
+@media (min-width: 1170px) {
   .burger {
     display: none;
   }
 }
 
-.burger span {
+.burger__line {
   position: absolute;
   left: 0;
-  right: 0;
-  height: 1.5px;
-  background: var(--color-ink);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.98);
+  transform-origin: 0 0;
 }
 
-.burger span:nth-child(1) {
+.burger__line--1 {
   top: 0;
+  transition: transform var(--ease);
 }
 
-.burger span:nth-child(2) {
+.burger__line--2 {
   top: 50%;
-  transform: translateY(-50%);
+  transition: opacity var(--ease);
 }
 
-.burger span:nth-child(3) {
+.burger__line--3 {
   bottom: 0;
+  transform-origin: 0 100%;
+  transition: transform var(--ease);
 }
 
-.burger--open span:nth-child(1) {
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
+.burger--close {
+  transform: translateX(4.5px);
 }
 
-.burger--open span:nth-child(2) {
+.burger--close .burger__line--1 {
+  transform: rotate(45deg) translateY(-50%);
+}
+
+.burger--close .burger__line--2 {
   opacity: 0;
 }
 
-.burger--open span:nth-child(3) {
-  bottom: 50%;
-  transform: translateY(50%) rotate(-45deg);
+.burger--close .burger__line--3 {
+  transform: rotate(-45deg) translateY(50%);
 }
 
+/* ---------- Mobil menü ---------- */
 .mobile-menu {
   position: fixed;
   inset: 0;
-  top: 0;
-  background: var(--color-bg);
+  z-index: 65;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  padding: 24px;
-  text-align: center;
+  background-color: hsla(0, 0%, 100%, 0.95);
+}
+
+.mobile-menu__lang {
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .mobile-menu__links {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  align-items: center;
 }
 
 .mobile-menu__link {
-  font-family: var(--font-display);
-  font-size: clamp(26px, 7vw, 36px);
+  position: relative;
+  margin: 2px 0;
+}
+
+.mobile-menu__link.router-link-exact-active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 110%;
+  height: 1px;
+  background: var(--color-green);
+  transform: translateX(-50%);
+}
+
+.menu-fade-enter-active {
+  transition: opacity var(--ease);
+}
+
+.menu-fade-leave-active {
+  transition: opacity var(--ease);
+}
+
+.menu-fade-enter-from,
+.menu-fade-leave-to {
   opacity: 0;
-  transform: translateY(12px);
-  animation: link-in 0.5s ease forwards;
-}
-
-@keyframes link-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.mobile-menu__meta {
-  font-size: 13px;
-  color: var(--color-muted);
-  line-height: 1.7;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-@media (min-width: 1320px) {
-  .mobile-menu {
-    display: none;
-  }
 }
 </style>

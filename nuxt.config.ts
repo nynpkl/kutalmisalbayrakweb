@@ -25,24 +25,23 @@ export default defineNuxtConfig({
   },
 
   app: {
+    // Referanstaki gibi sayfalar arası yumuşak geçiş (opacity .375s)
+    pageTransition: { name: 'page-fade', mode: 'out-in' },
+
     head: {
       htmlAttrs: { lang: 'tr' },
-      title: 'Op. Dr. Kutalmış Albayrak | Ortopedi ve Travmatoloji — Omuz ve Dirsek Cerrahisi',
+      // Sayfa başlığı ve açıklaması dile göre app/layouts/default.vue içinde ayarlanır
       meta: [
-        {
-          name: 'description',
-          content:
-            'Op. Dr. Kutalmış Albayrak — Ortopedi ve Travmatoloji uzmanı; omuz ve dirsek cerrahisi, spor yaralanmaları ve artroskopik cerrahi alanında İstanbul\'da hizmet vermektedir.'
-        },
-        { name: 'theme-color', content: '#0f6f5c' }
+        { name: 'theme-color', content: '#ffffff' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap'
+          href: 'https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400&display=swap'
         }
       ]
     }

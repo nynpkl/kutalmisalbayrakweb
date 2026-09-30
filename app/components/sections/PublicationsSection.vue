@@ -43,36 +43,26 @@ const fallback = {
   ]
 }
 
-const { data } = await useSiteContent()
-const publications = computed(() => ({ ...fallback, ...(data.value?.publications ?? {}) }))
+const publications = await useSection('publications', fallback)
+const { t, pathTo } = useLang()
 </script>
 
 <template>
-  <section id="yayinlar" class="section publications">
-    <div class="container publications__head">
-      <p class="eyebrow">{{ publications.eyebrow }}</p>
-      <h2 class="section-title">{{ publications.title }}</h2>
-      <p class="section-lead">{{ publications.lead }}</p>
-    </div>
+  <section class="publications">
+    <p class="t-text-big wrap-text">{{ publications.lead }}</p>
 
-    <div class="container">
-      <ul class="publications__list">
-        <li v-for="pub in publications.items" :key="pub.title" class="publications__item">
-          <span class="publications__year">{{ pub.year }}</span>
-          <div class="publications__body">
-            <h3 class="publications__title">{{ pub.title }}</h3>
-            <p class="publications__venue">{{ pub.venue }}</p>
-          </div>
-        </li>
-      </ul>
+    <h2 class="t-main-menu center wrap-text block">{{ t('selectedPublications') }}</h2>
+    <ol class="wrap-text publications__list">
+      <li v-for="item in publications.items" :key="item.title" class="publication">
+        <p class="publication__year t-result-title">{{ item.year }}</p>
+        <p class="publication__title t-result-text">{{ item.title }}</p>
+        <p class="publication__venue t-text">{{ item.venue }}</p>
+      </li>
+    </ol>
 
-      <a
-        :href="publications.scholarUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="publications__scholar link-underline"
-      >
-        Google Scholar profilinde tüm yayınları görüntüle →
+    <div class="center block">
+      <a :href="publications.scholarUrl" target="_blank" rel="noopener noreferrer" class="btn">
+        {{ t('allPublications') }}
       </a>
     </div>
   </section>
@@ -80,51 +70,29 @@ const publications = computed(() => ({ ...fallback, ...(data.value?.publications
 
 <style scoped>
 .publications__list {
-  margin-top: 50px;
-  border-top: 1px solid var(--color-line);
+  margin-top: 56px;
 }
 
-.publications__scholar {
-  display: inline-block;
-  margin-top: 32px;
-  font-size: 13.5px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--color-accent);
+.publication {
+  padding: 26px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  text-align: center;
 }
 
-.publications__item {
-  display: grid;
-  grid-template-columns: 70px 1fr;
-  gap: 24px;
-  padding-block: 28px;
-  border-bottom: 1px solid var(--color-line);
-  transition: padding-left 0.3s ease;
+.publication:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.publications__item:hover {
-  padding-left: 10px;
-  background: var(--color-accent-soft);
+.publication__year {
+  color: var(--color-green);
 }
 
-.publications__year {
-  font-family: var(--font-display);
-  font-size: 20px;
-  color: var(--color-accent);
-}
-
-.publications__title {
-  font-family: var(--font-display);
-  font-size: clamp(19px, 2vw, 24px);
-  font-weight: 500;
-}
-
-.publications__venue {
+.publication__title {
   margin-top: 8px;
-  font-size: 13.5px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--color-muted);
+}
+
+.publication__venue {
+  margin-top: 8px;
+  font-style: italic;
 }
 </style>

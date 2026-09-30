@@ -7,6 +7,7 @@ const MIN_DURATION = 3000 // barın dolma süresi (ms)
 const visible = ref(true)
 const leaving = ref(false)
 const barFill = ref<HTMLElement>()
+const { t } = useLang()
 
 useHead({
   htmlAttrs: { class: computed(() => (visible.value ? 'intro-lock' : '')) },
@@ -44,7 +45,7 @@ onMounted(async () => {
     :class="{ 'intro--leaving': leaving }"
     :style="{ '--intro-duration': `${MIN_DURATION}ms` }"
     role="status"
-    aria-label="Yükleniyor"
+    :aria-label="t('a11y.loading')"
   >
     <div class="intro__backdrop" :style="{ backgroundImage: `url(${INTRO_IMAGE})` }" aria-hidden="true" />
     <div class="intro__stage">
@@ -53,7 +54,7 @@ onMounted(async () => {
         :src="INTRO_IMAGE"
         width="1672"
         height="941"
-        alt="Doç. Dr. Kutalmış Albayrak — Omuz, Dirsek ve Spor Cerrahisi"
+        :alt="t('intro.alt')"
         fetchpriority="high"
       />
       <div class="intro__bar" aria-hidden="true">

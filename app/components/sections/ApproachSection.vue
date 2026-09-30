@@ -23,90 +23,31 @@ const fallback = {
   ]
 }
 
-const { data } = await useSiteContent()
-const approach = computed(() => ({ ...fallback, ...(data.value?.approach ?? {}) }))
+const approach = await useSection('approach', fallback)
+const { t, pathTo } = useLang()
+
+withDefaults(defineProps<{ showTitle?: boolean }>(), { showTitle: true })
 </script>
 
 <template>
-  <section id="yaklasim" class="section approach">
-    <div class="container approach__grid">
-      <div class="approach__intro">
-        <p class="eyebrow">{{ approach.eyebrow }}</p>
-        <h2 class="section-title">{{ approach.title }}</h2>
-        <p class="section-lead">{{ approach.lead }}</p>
-      </div>
-
-      <ol class="approach__steps">
-        <li v-for="(step, index) in approach.steps" :key="step.title" class="approach__step">
-          <span class="approach__index">{{ String(index + 1).padStart(2, '0') }}</span>
-          <div>
-            <h3 class="approach__title">{{ step.title }}</h3>
-            <p class="approach__text">{{ step.text }}</p>
-          </div>
-        </li>
-      </ol>
-    </div>
+  <!-- Referanstaki numaralı iki sütunlu listenin ("1. Age-Neutral Learning: ...") karşılığı -->
+  <section class="approach">
+    <h2 v-if="showTitle" class="t-title center wrap-text approach__title">{{ approach.title }}</h2>
+    <p class="t-text-big wrap-text" :class="{ approach__lead: showTitle }">{{ approach.lead }}</p>
+    <ol class="num-list t-list wrap-list approach__steps">
+      <li v-for="(step, i) in approach.steps" :key="step.title">
+        {{ i + 1 }}. <strong>{{ step.title }}:</strong> {{ step.text }}
+      </li>
+    </ol>
   </section>
 </template>
 
 <style scoped>
-.approach__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(40px, 6vw, 80px);
-}
-
-@media (min-width: 900px) {
-  .approach__grid {
-    grid-template-columns: 0.9fr 1.1fr;
-  }
-}
-
-.approach__intro {
-  position: sticky;
-  top: 120px;
-  align-self: start;
+.approach__lead {
+  margin-top: 64px;
 }
 
 .approach__steps {
-  display: flex;
-  flex-direction: column;
-}
-
-.approach__step {
-  display: flex;
-  gap: 26px;
-  padding-block: 30px;
-  border-top: 1px solid var(--color-line);
-}
-
-.approach__step:last-child {
-  border-bottom: 1px solid var(--color-line);
-}
-
-.approach__index {
-  font-family: var(--font-display);
-  font-size: 22px;
-  color: var(--color-accent);
-  min-width: 40px;
-}
-
-.approach__title {
-  font-family: var(--font-display);
-  font-size: 22px;
-}
-
-.approach__text {
-  margin-top: 10px;
-  color: var(--color-muted);
-  font-size: 14.5px;
-  line-height: 1.65;
-  max-width: 46ch;
-}
-
-@media (max-width: 899px) {
-  .approach__intro {
-    position: static;
-  }
+  margin-top: 64px;
 }
 </style>
