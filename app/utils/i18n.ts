@@ -83,7 +83,7 @@ export const ui = {
     'a11y.home': 'Home page',
     'a11y.loading': 'Loading',
     'a11y.language': 'Language',
-    'doctor': 'Assoc. Prof. Dr. Kutalmış Albayrak',
+    'doctor': 'Assoc. Prof. Kutalmış Albayrak',
     'bookAppointment': 'Book an Appointment',
     'readMore': 'Read more',
     'resume': 'Curriculum Vitae',
@@ -103,10 +103,10 @@ export const ui = {
     'contact.call': 'Call to book an appointment',
     'footer.otherProfiles': 'Other profiles:',
     'footer.rights': 'all rights reserved.',
-    'meta.title': 'Assoc. Prof. Dr. Kutalmış Albayrak | Orthopaedics and Traumatology — Shoulder and Elbow Surgery',
+    'meta.title': 'Assoc. Prof. Kutalmış Albayrak | Orthopaedics and Traumatology — Shoulder and Elbow Surgery',
     'meta.description':
-      'Assoc. Prof. Dr. Kutalmış Albayrak — specialist in Orthopaedics and Traumatology focusing on shoulder and elbow surgery, sports injuries and arthroscopic surgery in Istanbul.',
-    'intro.alt': 'Assoc. Prof. Dr. Kutalmış Albayrak — Shoulder, Elbow and Sports Surgery'
+      'Assoc. Prof. Kutalmış Albayrak — specialist in Orthopaedics and Traumatology focusing on shoulder and elbow surgery, sports injuries and arthroscopic surgery in Istanbul.',
+    'intro.alt': 'Assoc. Prof. Kutalmış Albayrak — Shoulder, Elbow and Sports Surgery'
   }
 } as const
 

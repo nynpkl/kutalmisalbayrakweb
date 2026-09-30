@@ -16,10 +16,10 @@ const title = computed(() => props.lines.filter(Boolean))
 
 const { t, pathTo, locale } = useLang()
 
-// İsim logosu: İngilizcede "ASSOC. PROF. DR." yazan sürüm (daha uzun olduğu için genişliği oranında büyür)
+// İsim logosu: İngilizcede "ASSOC. PROF." yazan sürüm (daha uzun olduğu için genişliği oranında büyür)
 const wordmark = computed(() =>
   locale.value === 'en'
-    ? { src: '/images/logo/ka-wordmark-en-black.png', width: 1785, height: 167 }
+    ? { src: '/images/logo/ka-wordmark-en-black.png', width: 1597, height: 167 }
     : { src: '/images/logo/ka-wordmark-black.png', width: 1400, height: 165 }
 )
 </script>
