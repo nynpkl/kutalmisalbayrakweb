@@ -139,10 +139,10 @@ Kullanıcının "tüm içeriği doktorun kendisi yönetebilsin" isteği üzerine
 Referans sitedeki (instrosenberg.ch) açılış ekranı incelendi: `pace.js` ile tam ekran bir fotoğraf, ortada logo/yazı ve altında soldan sağa dolan 1px'lik beyaz bir çizgi; yükleme bitince ekran kararıp site açılıyor.
 
 - `app/components/layout/IntroLoader.vue` eklendi ve `app/layouts/default.vue` içine konuldu (admin paneli `blank` layout kullandığı için orada görünmez).
-- Görsel: kullanıcının eklediği `public/images/intro.png` (fotoğraf + KA logosu + isim + çizgi) netlik kaybı olmasın diye sıkıştırılmadan, doğrudan PNG olarak kullanılıyor (JPG sıkıştırması ince beyaz yazılarda bulanıklık yapıyordu).
+- Görsel: kullanıcının eklediği yatay intro görseli ("Intro Kuto", 1672×941, fotoğraf + KA logosu + isim + çizgi) `public/images/intro.png` olarak, netlik kaybı olmasın diye sıkıştırılmadan kullanılıyor (JPG sıkıştırması ince beyaz yazılarda bulanıklık yapıyordu).
 - "SHOULDER · ELBOW · SPORTS SURGERY" yazısının altında, görseldeki isim altı çizgisiyle aynı genişlikte bir bar ~3 saniyede doluyor; ardından intro 0,7 sn'de kararıp kayboluyor. Süre `MIN_DURATION` sabitinden ayarlanır.
 - Süre, sayfa isteğinin başından değil barın ekranda dolmaya başladığı andan sayılır (CSS animasyonunun bitişi beklenir); böylece sayfa geç açılsa bile intro kısa kesilmez.
-- Görsel her ekranda kırpılmadan tamamı görünecek şekilde sığdırılır (önceki "ekranı doldur" yaklaşımı masaüstünde bonenin kesilmesine yol açıyordu); kalan boşlukları aynı görselin bulanık kopyası yumuşak geçişle tamamlar. Bar konumu görsel piksel ölçülerek (çizgi y=719, x=248–1137) hizalandı.
+- Görselin yüksekliği ekranı hiçbir zaman aşmaz (üstteki bone kesilmesin); genişlikte yalnızca kenarlardaki bulanık alanlar her yandan en fazla ~%14 kırpılabilir. Böylece 16:10, 5:4 gibi ekranlar tamamen dolar; daha geniş/dar ekranlarda kalan boşlukları aynı görselin bulanık kopyası yumuşak geçişle tamamlar. Bar konumu görsel piksel ölçülerek (çizgi y=595, x=458–1212) hizalandı.
 - Güvenlik ağları: sayfa en geç 6 sn içinde yüklenmezse intro yine kapanır; JS hiç çalışmazsa CSS ile 8 sn sonra kendiliğinden kaybolur. Intro açıkken sayfa kaydırılamaz.
 
 ## 13. Supabase duraklatma sorunu ve günlük "canlı tutma" isteği

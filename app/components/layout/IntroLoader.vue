@@ -51,8 +51,8 @@ onMounted(async () => {
       <img
         class="intro__image"
         :src="INTRO_IMAGE"
-        width="1367"
-        height="1150"
+        width="1672"
+        height="941"
         alt="Doç. Dr. Kutalmış Albayrak — Omuz, Dirsek ve Spor Cerrahisi"
         fetchpriority="high"
       />
@@ -88,28 +88,30 @@ onMounted(async () => {
   filter: blur(28px) brightness(0.75);
 }
 
-/* Görsel her ekranda kırpılmadan, tamamı görünecek şekilde sığdırılır ("contain");
-   kalan boşlukları aynı görselin bulanık kopyası tamamlar. */
+/* Görsel yüksekliği hiçbir zaman ekranı aşmaz (üstteki bone kesilmesin); genişlikte ise
+   yalnızca kenarlardaki bulanık alanlar, her yandan en fazla ~%14 kırpılabilir
+   (yüz, bone ve yazılar görselin %16–%73 aralığında kalır). Kalan boşlukları
+   aynı görselin bulanık kopyası tamamlar. */
 .intro__stage {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100vw, calc(100svh * 1367 / 1150));
-  aspect-ratio: 1367 / 1150;
+  width: min(calc(100svh * 1672 / 941), 139vw);
+  aspect-ratio: 1672 / 941;
   transform: translate(-50%, -50%);
 }
 
-/* Yatay ekranlarda sağ/sol kenarlar bulanık arka plana yumuşakça karışsın
-   (soldaki yüz ~%10'dan başladığı için sol geçiş dar tutuldu) */
-@media (min-aspect-ratio: 1367 / 1150) {
+/* Görselden daha geniş ekranlarda sağ/sol kenarlar bulanık arka plana yumuşakça karışsın */
+@media (min-aspect-ratio: 1672 / 941) {
   .intro__stage {
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 92%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
   }
 }
 
-/* Dikey ekranlarda üst/alt kenarlar (bone görselin en üstünde olduğu için üst geçiş dar tutuldu) */
-@media (max-aspect-ratio: 1367 / 1150) {
+/* Görsel ekran yüksekliğini dolduramadığında (telefon, kareye yakın ekranlar) üst/alt kenarlar
+   (bone görselin en üstünde olduğu için üst geçiş dar tutuldu) */
+@media (max-aspect-ratio: 23 / 18) {
   .intro__stage {
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 3%, #000 88%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0, #000 3%, #000 88%, transparent 100%);
@@ -126,9 +128,9 @@ onMounted(async () => {
    Konum/genişlik, görseldeki isim altı çizgisiyle hizalı olacak şekilde yüzde olarak verilir. */
 .intro__bar {
   position: absolute;
-  top: 69.7%;
-  left: 18.14%;
-  width: 65.1%;
+  top: 71.1%;
+  left: 27.39%;
+  width: 45.16%;
   height: 1px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.2);
