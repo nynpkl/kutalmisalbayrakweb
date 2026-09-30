@@ -9,6 +9,15 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  nitro: {
+    vercel: {
+      config: {
+        // Supabase'in duraklatılmaması için her gün 05:00 UTC (08:00 TR) veritabanına istek at
+        crons: [{ path: '/api/cron/keepalive', schedule: '0 5 * * *' }]
+      }
+    }
+  },
+
   runtimeConfig: {
     supabaseUrl: '',
     supabaseServiceKey: '',

@@ -134,6 +134,24 @@ Kullanıcının "tüm içeriği doktorun kendisi yönetebilsin" isteği üzerine
 
 ⚠️ **Güvenlik notu:** Kurulum sırasında kullanıcı, veritabanı şifresini ve `service_role` anahtarını sohbet üzerinden düz metin olarak paylaştı. Bu bilgiler yalnızca yerel `.env` dosyasına (git'e dahil değil) ve Vercel'in şifreli ortam değişkeni deposuna yazıldı; başka hiçbir yere kaydedilmedi. Yine de ekstra güvenlik için kullanıcı isterse Supabase Dashboard'dan veritabanı şifresini sıfırlayabilir (bu durumda Vercel/`.env`'deki `NUXT_SUPABASE_URL` aynı kalır, sadece yeni bağlantı string'i gerekirse güncellenir).
 
+## 12. Giriş (intro) ekranı
+
+Referans sitedeki (instrosenberg.ch) açılış ekranı incelendi: `pace.js` ile tam ekran bir fotoğraf, ortada logo/yazı ve altında soldan sağa dolan 1px'lik beyaz bir çizgi; yükleme bitince ekran kararıp site açılıyor.
+
+- `app/components/layout/IntroLoader.vue` eklendi ve `app/layouts/default.vue` içine konuldu (admin paneli `blank` layout kullandığı için orada görünmez).
+- Görsel: kullanıcının eklediği `public/images/intro.png` (fotoğraf + KA logosu + isim + çizgi) `public/images/intro.jpg` olarak sıkıştırıldı (1,7 MB → 213 KB).
+- "SHOULDER · ELBOW · SPORTS SURGERY" yazısının altında, görseldeki isim altı çizgisiyle aynı genişlikte bir bar ~3 saniyede doluyor; ardından intro 0,7 sn'de kararıp kayboluyor. Süre `MIN_DURATION` sabitinden ayarlanır.
+- Süre, sayfa isteğinin başından değil barın ekranda dolmaya başladığı andan sayılır (CSS animasyonunun bitişi beklenir); böylece sayfa geç açılsa bile intro kısa kesilmez.
+- Masaüstünde görsel ekranı doldurur; dikey (mobil) ekranlarda yazılar kırpılmasın diye görsel ortada, arkası aynı görselin bulanık kopyasıyla ve yumuşak geçişle tamamlanır.
+- Güvenlik ağları: sayfa en geç 6 sn içinde yüklenmezse intro yine kapanır; JS hiç çalışmazsa CSS ile 8 sn sonra kendiliğinden kaybolur. Intro açıkken sayfa kaydırılamaz.
+
+## 13. Supabase duraklatma sorunu ve günlük "canlı tutma" isteği
+
+- Supabase'in ücretsiz planı 7 gün kullanılmayan projeleri duraklatır (pause). Site az ziyaret aldığı için proje duraklatılmış, alan adı DNS'te bulunamaz hale gelmişti. Bu yüzden canlı site her açılışta veritabanını bekleyip **~16 saniyede** açılıyordu. Kullanıcı projeyi Supabase panelinden "Restore" ile geri açtı; veriler kaybolmadı.
+- `server/api/content/index.get.ts`: Supabase sorgusuna 3 sn zaman aşımı eklendi; `useSiteContent()` içindeki `useFetch`'e de 4 sn zaman aşımı verildi. Veritabanı erişilemez olsa bile site birkaç saniye içinde fallback içerikle açılır.
+- `server/api/cron/keepalive.get.ts`: Veritabanına küçük bir sorgu atan uç nokta. `CRON_SECRET` ortam değişkeni tanımlıysa yalnızca `Authorization: Bearer <CRON_SECRET>` başlığıyla (Vercel Cron bunu otomatik ekler) çalışır.
+- `nuxt.config.ts` → `nitro.vercel.config.crons`: Vercel Cron her gün 05:00 UTC (08:00 TR) bu uç noktayı çağırır; proje hiçbir zaman 7 gün sessiz kalmaz.
+
 ## Sonraki adımlar (kullanıcıyla birlikte yapılacak)
 
 - [ ] Doktorun kendisiyle teyit: biyografideki tarihler/kurumlar, üyelikler ve yayın listesinin güncelliği.
