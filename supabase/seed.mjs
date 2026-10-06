@@ -15,6 +15,38 @@ if (!url || !serviceKey) {
 const supabase = createClient(url, serviceKey)
 
 const sections = {
+  // Tedaviler: geçici örnek içerik (doktordan gelecek metinlerle admin panelinden değiştirilecek)
+  treatments: {
+    "eyebrow": "Tedaviler",
+    "title": "Tedavi ve cerrahi girişimler",
+    "lead": "Aşağıdaki liste, muayene ve tedavisi yapılan başlıca hastalıkları ve cerrahi girişimleri özetler. Her hasta için en uygun tedavi; muayene ve görüntüleme sonrasında, hastayla birlikte belirlenir.",
+    "groups": [
+      {
+        "title": "Omuz",
+        "text": "Rotator manşet yırtığı onarımı (artroskopik)\nOmuz çıkığı ve instabilite cerrahisi (Bankart onarımı)\nLatarjet ameliyatı\nOmuz sıkışma sendromu tedavisi\nDonuk omuz (adeziv kapsülit) tedavisi\nKalsifik tendinit tedavisi\nAkromiyoklaviküler eklem çıkığı tedavisi\nSLAP lezyonu ve biseps tendon cerrahisi\nOmuz protezi ve ters omuz protezi"
+      },
+      {
+        "title": "Dirsek",
+        "text": "Tenisçi dirseği (lateral epikondilit) tedavisi\nGolfçü dirseği (medial epikondilit) tedavisi\nDirsek artroskopisi\nDirsek kırık ve çıkıklarının cerrahi tedavisi\nDirsek instabilitesi ve bağ rekonstrüksiyonu\nDirsek sertliği (kontraktür) tedavisi\nDistal biseps tendon yırtığı onarımı"
+      },
+      {
+        "title": "Diz ve Spor Yaralanmaları",
+        "text": "Ön çapraz bağ (ÖÇB) rekonstrüksiyonu\nMenisküs onarımı ve kısmi menisektomi\nDiz artroskopisi\nKıkırdak hasarı tedavileri\nDiz kapağı (patella) instabilitesi tedavisi"
+      },
+      {
+        "title": "Protez Cerrahisi",
+        "text": "Total diz protezi\nTotal kalça protezi\nRevizyon protez cerrahisi"
+      },
+      {
+        "title": "Kırık ve Travma",
+        "text": "Uzun kemik kırıklarında intramedüller çivileme\nPlak-vida ile kırık tespiti\nKaynamama ve kötü kaynama tedavisi"
+      },
+      {
+        "title": "Ayak ve Ayak Bileği",
+        "text": "Halluks valgus (bunyon) cerrahisi\nAşil tendon yırtığı onarımı\nAyak bileği artroskopisi\nAyak bileği bağ yaralanmaları tedavisi"
+      }
+    ]
+  },
   hero: {
     kicker: 'Doç. Dr. Kutalmış Albayrak',
     titleLine1: 'Hareketin özgürlüğü,',
@@ -74,6 +106,7 @@ const sections = {
     title: 'Bilimsel katkılar',
     lead: 'Klinik pratiğinin yanı sıra akademik çalışmalarını sürdürerek uluslararası indeksli dergilerde ortopedi ve travmatoloji literatürüne katkıda bulunuyor.',
     scholarUrl: 'https://scholar.google.com/citations?user=_pwBOwsAAAAJ&hl=tr',
+    memberships: "TOTBİD — Türk Ortopedi ve Travmatoloji Birliği Derneği\nTOTDER\nTUSYAD — Türkiye Spor Yaralanmaları, Artroskopi ve Diz Cerrahisi Derneği\nTürk Omuz Dirsek Cerrahisi Derneği\nSECEC — European Society for Surgery of the Shoulder and the Elbow",
     items: [
       { year: '2025', title: 'Long-term clinical comparison of three different femoral stems in Total Hip Arthroplasty with femoral shortening in patients with high-riding hips', venue: 'Journal of Orthopaedic Surgery and Research' },
       { year: '2025', title: 'The Montecranon classification — a comprehensive treatment strategy for complex proximal ulna fracture dislocations', venue: 'JSES International' },

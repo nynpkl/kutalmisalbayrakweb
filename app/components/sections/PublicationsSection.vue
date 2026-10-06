@@ -4,6 +4,8 @@ const fallback = {
   title: 'Bilimsel katkılar',
   lead: 'Klinik pratiğinin yanı sıra akademik çalışmalarını sürdürerek uluslararası indeksli dergilerde ortopedi ve travmatoloji literatürüne katkıda bulunuyor.',
   scholarUrl: 'https://scholar.google.com/citations?user=_pwBOwsAAAAJ&hl=tr',
+  // Dernek üyelikleri: her satır bir üyelik (admin panelinde düzenlenir)
+  memberships: 'TOTBİD — Türk Ortopedi ve Travmatoloji Birliği Derneği\nTOTDER\nTUSYAD — Türkiye Spor Yaralanmaları, Artroskopi ve Diz Cerrahisi Derneği\nTürk Omuz Dirsek Cerrahisi Derneği\nSECEC — European Society for Surgery of the Shoulder and the Elbow',
   items: [
     {
       year: '2025',
@@ -44,7 +46,14 @@ const fallback = {
 }
 
 const publications = await useSection('publications', fallback)
-const { t, pathTo } = useLang()
+const { t } = useLang()
+
+const memberships = computed(() =>
+  String(publications.value.memberships ?? '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+)
 </script>
 
 <template>
@@ -65,6 +74,13 @@ const { t, pathTo } = useLang()
         {{ t('allPublications') }}
       </a>
     </div>
+
+    <template v-if="memberships.length">
+      <h2 class="t-main-menu center wrap-text block">{{ t('memberships') }}</h2>
+      <ul class="dot-list t-list publications__memberships">
+        <li v-for="item in memberships" :key="item">{{ item }}</li>
+      </ul>
+    </template>
   </section>
 </template>
 
@@ -94,5 +110,11 @@ const { t, pathTo } = useLang()
 .publication__venue {
   margin-top: 8px;
   font-style: italic;
+}
+
+.publications__memberships {
+  width: fit-content;
+  max-width: var(--text);
+  margin: 40px auto 0;
 }
 </style>

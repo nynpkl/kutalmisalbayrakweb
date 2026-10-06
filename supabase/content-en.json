@@ -77,10 +77,22 @@
   },
   "stats": {
     "items": [
-      { "value": "9+", "label": "Years of specialist practice in Orthopaedics and Traumatology" },
-      { "value": "6 Months", "label": "Shoulder and Elbow Surgery Fellowship in Switzerland" },
-      { "value": "10+", "label": "Publications in internationally indexed journals" },
-      { "value": "5", "label": "Memberships in national and international societies" }
+      {
+        "value": "9+",
+        "label": "Years of specialist practice in Orthopaedics and Traumatology"
+      },
+      {
+        "value": "6 Months",
+        "label": "Shoulder and Elbow Surgery Fellowship in Switzerland"
+      },
+      {
+        "value": "10+",
+        "label": "Publications in internationally indexed journals"
+      },
+      {
+        "value": "5",
+        "label": "Memberships in national and international societies"
+      }
     ]
   },
   "approach": {
@@ -146,7 +158,8 @@
         "title": "Early clinical and radiographic results of fixation with the TightRope device for Rockwood type V acromioclavicular joint dislocation: a retrospective review of 15 patients",
         "venue": "Acta Orthopaedica et Traumatologica Turcica"
       }
-    ]
+    ],
+    "memberships": "TOTBİD — Turkish Society of Orthopaedics and Traumatology\nTOTDER\nTUSYAD — Turkish Society of Sports Traumatology, Arthroscopy and Knee Surgery\nTurkish Shoulder and Elbow Surgery Society\nSECEC — European Society for Surgery of the Shoulder and the Elbow"
   },
   "testimonials": {
     "eyebrow": "Patient Reviews",
@@ -186,5 +199,36 @@
   "footer": {
     "tagline": "Freedom of movement, in trusted hands.",
     "legal": "This website is for informational purposes only and does not constitute medical advice. Please use the official hospital channels (MHRS / Alo 182) to book an appointment."
+  },
+  "treatments": {
+    "eyebrow": "Treatments",
+    "title": "Treatments and surgical procedures",
+    "lead": "The list below summarises the main conditions treated and the surgical procedures performed. The most appropriate treatment for each patient is decided together with the patient following clinical examination and imaging.",
+    "groups": [
+      {
+        "title": "Shoulder",
+        "text": "Rotator cuff repair (arthroscopic)\nShoulder dislocation and instability surgery (Bankart repair)\nLatarjet procedure\nTreatment of shoulder impingement syndrome\nTreatment of frozen shoulder (adhesive capsulitis)\nTreatment of calcific tendinitis\nTreatment of acromioclavicular joint dislocation\nSLAP lesion and biceps tendon surgery\nShoulder arthroplasty and reverse shoulder arthroplasty"
+      },
+      {
+        "title": "Elbow",
+        "text": "Treatment of tennis elbow (lateral epicondylitis)\nTreatment of golfer's elbow (medial epicondylitis)\nElbow arthroscopy\nSurgical treatment of elbow fractures and dislocations\nElbow instability and ligament reconstruction\nTreatment of elbow stiffness (contracture)\nDistal biceps tendon repair"
+      },
+      {
+        "title": "Knee and Sports Injuries",
+        "text": "Anterior cruciate ligament (ACL) reconstruction\nMeniscal repair and partial meniscectomy\nKnee arthroscopy\nTreatment of cartilage injuries\nTreatment of patellar instability"
+      },
+      {
+        "title": "Joint Replacement",
+        "text": "Total knee arthroplasty\nTotal hip arthroplasty\nRevision arthroplasty"
+      },
+      {
+        "title": "Fracture and Trauma",
+        "text": "Intramedullary nailing of long-bone fractures\nPlate-and-screw fracture fixation\nTreatment of non-union and malunion"
+      },
+      {
+        "title": "Foot and Ankle",
+        "text": "Hallux valgus (bunion) surgery\nAchilles tendon repair\nAnkle arthroscopy\nTreatment of ankle ligament injuries"
+      }
+    ]
   }
 }

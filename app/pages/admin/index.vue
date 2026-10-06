@@ -9,7 +9,8 @@ const defaults: Record<string, any> = {
   expertise: { eyebrow: '', title: '', lead: '', items: [] as Item[] },
   stats: { items: [] as Item[] },
   approach: { eyebrow: '', title: '', lead: '', steps: [] as Item[] },
-  publications: { eyebrow: '', title: '', lead: '', scholarUrl: '', items: [] as Item[] },
+  treatments: { eyebrow: '', title: '', lead: '', groups: [] as Item[] },
+  publications: { eyebrow: '', title: '', lead: '', scholarUrl: '', memberships: '', items: [] as Item[] },
   testimonials: { eyebrow: '', title: '', lead: '', rating: '', ratingLabel: '', ratingUrl: '', themes: [] as Item[] },
   contact: {
     eyebrow: '', title: '', lead: '', workplaceName: '', workplaceDept: '', address: '',
@@ -22,12 +23,13 @@ const defaults: Record<string, any> = {
 
 const tabs = [
   { id: 'hero', label: 'Hero' },
-  { id: 'about', label: 'Hakkımda' },
+  { id: 'about', label: 'Hakkımda & Özgeçmiş' },
   { id: 'expertise', label: 'Uzmanlık Alanları' },
+  { id: 'treatments', label: 'Tedaviler' },
   { id: 'stats', label: 'İstatistikler' },
-  { id: 'approach', label: 'Yaklaşımım' },
-  { id: 'publications', label: 'Yayınlar' },
-  { id: 'testimonials', label: 'Hasta Değerlendirmeleri' },
+  { id: 'approach', label: 'Yaklaşımım (ana sayfa)' },
+  { id: 'publications', label: 'Akademik' },
+  { id: 'testimonials', label: 'Hasta Değerlendirmeleri (gizli)' },
   { id: 'contact', label: 'İletişim' },
   { id: 'journal', label: 'Blog Yazıları' },
   { id: 'footer', label: 'Footer' }
@@ -159,7 +161,7 @@ async function logout() {
           <span v-if="uploading">Yükleniyor…</span>
         </div>
 
-        <h3>Akademik Yolculuk (Zaman Çizelgesi)</h3>
+        <h3>Akademik Yolculuk — Özgeçmiş sayfasında görünür</h3>
         <div v-for="(item, i) in content.about.timeline" :key="i" class="list-item">
           <input v-model="item.year" placeholder="Yıl (örn. 2019–2022)" style="max-width: 140px" />
           <input v-model="item.title" placeholder="Başlık (örn. Ortopedi ve Travmatoloji İhtisası)" />
@@ -189,6 +191,25 @@ async function logout() {
 
         <button class="save" type="button" @click="saveSection('expertise')">Kaydet</button>
         <span class="status" :class="status.expertise">{{ status.expertise === 'saved' ? 'Kaydedildi ✓' : status.expertise === 'error' ? 'Hata oluştu' : '' }}</span>
+      </section>
+
+      <!-- TREATMENTS -->
+      <section v-if="activeTab === 'treatments'" class="panel">
+        <h2>Tedaviler</h2>
+        <label>Üst etiket (sayfa başlığı)<input v-model="content.treatments.eyebrow" type="text" /></label>
+        <label>Başlık<input v-model="content.treatments.title" type="text" /></label>
+        <label>Açıklama<textarea v-model="content.treatments.lead" rows="3" /></label>
+
+        <h3>Tedavi Grupları</h3>
+        <div v-for="(item, i) in content.treatments.groups" :key="i" class="list-item list-item--stacked">
+          <input v-model="item.title" placeholder="Grup adı (örn. Omuz)" />
+          <textarea v-model="item.text" rows="6" placeholder="Her satıra bir tedavi" />
+          <button type="button" class="remove" @click="removeItem('treatments', 'groups', i)">Sil</button>
+        </div>
+        <button type="button" class="add" @click="addItem('treatments', 'groups', { title: '', text: '' })">+ Grup Ekle</button>
+
+        <button class="save" type="button" @click="saveSection('treatments')">Kaydet</button>
+        <span class="status" :class="status.treatments">{{ status.treatments === 'saved' ? 'Kaydedildi ✓' : status.treatments === 'error' ? 'Hata oluştu' : '' }}</span>
       </section>
 
       <!-- STATS -->
@@ -226,7 +247,7 @@ async function logout() {
 
       <!-- PUBLICATIONS -->
       <section v-if="activeTab === 'publications'" class="panel">
-        <h2>Yayınlar</h2>
+        <h2>Akademik (Yayınlar ve Üyelikler)</h2>
         <label>Üst etiket<input v-model="content.publications.eyebrow" type="text" /></label>
         <label>Başlık<input v-model="content.publications.title" type="text" /></label>
         <label>Açıklama<textarea v-model="content.publications.lead" rows="3" /></label>
@@ -241,6 +262,9 @@ async function logout() {
         </div>
         <button type="button" class="add" @click="addItem('publications', 'items', { year: '', title: '', venue: '' })">+ Yayın Ekle</button>
 
+        <h3>Dernek Üyelikleri</h3>
+        <label>Her satıra bir üyelik<textarea v-model="content.publications.memberships" rows="6" /></label>
+
         <button class="save" type="button" @click="saveSection('publications')">Kaydet</button>
         <span class="status" :class="status.publications">{{ status.publications === 'saved' ? 'Kaydedildi ✓' : status.publications === 'error' ? 'Hata oluştu' : '' }}</span>
       </section>
@@ -248,6 +272,7 @@ async function logout() {
       <!-- TESTIMONIALS -->
       <section v-if="activeTab === 'testimonials'" class="panel">
         <h2>Hasta Değerlendirmeleri</h2>
+        <p class="panel__note">Bu bölüm sitede gösterilmiyor; yalnızca footer'daki "Doktor Takvimi" bağlantısı buradaki platform linkinden alınır.</p>
         <label>Üst etiket<input v-model="content.testimonials.eyebrow" type="text" /></label>
         <label>Başlık<input v-model="content.testimonials.title" type="text" /></label>
         <label>Açıklama<textarea v-model="content.testimonials.lead" rows="3" /></label>
@@ -388,6 +413,13 @@ async function logout() {
   gap: 10px;
   padding-top: 16px;
   border-top: 1px solid rgba(244, 242, 236, 0.15);
+}
+
+.panel__note {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0.7;
 }
 
 .admin__lang {

@@ -199,8 +199,19 @@ Site iki dilli hale getirildi; site Türkçe açılır, sol üstteki **TR / EN**
 - **Alt sayfalar:** Tam ekran slogan başlığı ve aşağı ok kaldırıldı; içerik, üst bölümün hemen altında sade bir sayfa başlığıyla ("Hakkımda", "Uzmanlık Alanları" …) başlar (`PageTitle.vue`, admin panelindeki "üst etiket" alanından). Slogan cümleleri admin panelinde duruyor ama alt sayfalarda gösterilmiyor.
 - **Ana sayfa:** Tam ekran slogan ("Hareketin özgürlüğü, güvenilir ellerde.") şimdilik korunuyor; yalnızca altındaki menü kaldırıldı (`PageHero.vue` artık yalnızca ana sayfa için).
 
+## 17. Menü yeniden düzenlendi: Hakkımda · Uzmanlık · Tedaviler · Özgeçmiş · Akademik · İletişim
+
+profdregemenaltan.com'daki menü yapısı örnek alındı (EN: About · Expertise · Treatments · CV · Academic · Contact).
+
+- **Tedaviler (`/tedaviler`, `/en/treatments`, yeni):** Uzmanlık alanlarına göre gruplanmış tedavi listesi (Omuz, Dirsek, Diz ve Spor Yaralanmaları, Protez Cerrahisi, Kırık ve Travma, Ayak ve Ayak Bileği). ⚠️ **Geçici örnek içeriktir** — kullanıcı, doktordan gelecek metinlerle değiştirecek. Admin panelinde yeni "Tedaviler" sekmesi: her grup için ad + "her satıra bir tedavi" alanı. Supabase'e `treatments` / `treatments_en` satırları eklendi.
+- **Özgeçmiş (`/ozgecmis`, `/en/cv`, yeni):** Akademik Yolculuk zaman çizelgesi Hakkımda'dan buraya taşındı (`CvSection.vue`); veri hâlâ admin panelindeki "Hakkımda & Özgeçmiş" sekmesinden düzenlenir. Hakkımda sayfasında fotoğraf ve tanıtım metni kaldı.
+- **Akademik (`/akademik`, `/en/academic`):** Eski Yayınlar sayfası; altına **dernek üyelikleri** eklendi (TOTBİD, TOTDER, TUSYAD, Türk Omuz Dirsek Cerrahisi Derneği, SECEC — TOTDER'in açık adı doğrulanamadığı için kısaltmayla bırakıldı). Admin panelinde Akademik sekmesine "Dernek Üyelikleri" alanı eklendi.
+- **Kaldırılanlar:** Yaklaşım ve Yorumlar sayfaları ile menü başlıkları. Ana sayfadaki 4 adımlı Yaklaşım bölümü korunuyor. Yorumlar içeriği sitede gösterilmiyor (admin sekmesi "(gizli)" olarak duruyor; footer'daki Doktor Takvimi bağlantısı buradan okunuyor).
+- **Eski adresler:** `/yayinlar` → `/akademik`, `/yaklasim` ve `/yorumlar` → ana sayfa (İngilizceleri de) kalıcı (301) yönlendirme (`nuxt.config.ts` → `routeRules`).
+
 ## Sonraki adımlar (kullanıcıyla birlikte yapılacak)
 
+- [ ] Tedaviler sayfasındaki geçici listeyi doktorun metinleriyle değiştirmek (admin → Tedaviler).
 - [ ] Doktorun kendisiyle teyit: biyografideki tarihler/kurumlar, üyelikler ve yayın listesinin güncelliği.
 - [ ] Orijinal, yüksek çözünürlüklü profil fotoğrafı ve klinik/ameliyathane görselleri admin panelinden yüklemek.
 - [ ] İletişim formunu (ad/telefon/mesaj) gerçek bir gönderim mekanizmasına (e-posta servisi veya backend) bağlamak — şu an sadece statik bir arayüz.

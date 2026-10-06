@@ -1,40 +1,40 @@
 // Site iki dilli: Türkçe varsayılan (/, /hakkimda …), İngilizce /en altında (/en, /en/about …).
 export type Locale = 'tr' | 'en'
 
-export type PageKey = 'home' | 'about' | 'expertise' | 'approach' | 'publications' | 'reviews' | 'contact'
+export type PageKey = 'home' | 'about' | 'expertise' | 'treatments' | 'cv' | 'academic' | 'contact'
 
 export const pagePaths: Record<Locale, Record<PageKey, string>> = {
   tr: {
     home: '/',
     about: '/hakkimda',
     expertise: '/uzmanlik',
-    approach: '/yaklasim',
-    publications: '/yayinlar',
-    reviews: '/yorumlar',
+    treatments: '/tedaviler',
+    cv: '/ozgecmis',
+    academic: '/akademik',
     contact: '/iletisim'
   },
   en: {
     home: '/en',
     about: '/en/about',
     expertise: '/en/expertise',
-    approach: '/en/approach',
-    publications: '/en/publications',
-    reviews: '/en/reviews',
+    treatments: '/en/treatments',
+    cv: '/en/cv',
+    academic: '/en/academic',
     contact: '/en/contact'
   }
 }
 
 // Ana menü sırası (referans sitedeki gibi her başlık kendi sayfasına gider)
-export const navOrder: PageKey[] = ['about', 'expertise', 'approach', 'publications', 'reviews', 'contact']
+export const navOrder: PageKey[] = ['about', 'expertise', 'treatments', 'cv', 'academic', 'contact']
 
 export const ui = {
   tr: {
     'nav.home': 'Ana Sayfa',
     'nav.about': 'Hakkımda',
     'nav.expertise': 'Uzmanlık',
-    'nav.approach': 'Yaklaşım',
-    'nav.publications': 'Yayınlar',
-    'nav.reviews': 'Yorumlar',
+    'nav.treatments': 'Tedaviler',
+    'nav.cv': 'Özgeçmiş',
+    'nav.academic': 'Akademik',
     'nav.contact': 'İletişim',
     'a11y.mainMenu': 'Ana menü',
     'a11y.openMenu': 'Menüyü aç',
@@ -46,14 +46,14 @@ export const ui = {
     'doctor': 'Doç. Dr. Kutalmış Albayrak',
     'bookAppointment': 'Randevu Al',
     'readMore': 'Devamını oku',
-    'resume': 'Özgeçmiş',
+    'cv.title': 'Özgeçmiş',
     'journey.first': 'Akademik',
     'journey.second': 'Yolculuk',
     'byNumbers': 'Rakamlarla.',
     'contactLabel': 'İletişim:',
     'selectedPublications': 'Seçilmiş yayınlar:',
     'allPublications': 'Tüm yayınlar — Google Scholar',
-    'viewAllReviews': 'Tüm değerlendirmeleri görüntüle',
+    'memberships': 'Üyelikler:',
     'contact.workplace': 'Görev yeri',
     'contact.address': 'Adres',
     'contact.phone': 'Randevu hattı',
@@ -72,9 +72,9 @@ export const ui = {
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.expertise': 'Expertise',
-    'nav.approach': 'Approach',
-    'nav.publications': 'Publications',
-    'nav.reviews': 'Reviews',
+    'nav.treatments': 'Treatments',
+    'nav.cv': 'CV',
+    'nav.academic': 'Academic',
     'nav.contact': 'Contact',
     'a11y.mainMenu': 'Main menu',
     'a11y.openMenu': 'Open menu',
@@ -86,14 +86,14 @@ export const ui = {
     'doctor': 'Assoc. Prof. Kutalmış Albayrak',
     'bookAppointment': 'Book an Appointment',
     'readMore': 'Read more',
-    'resume': 'Curriculum Vitae',
+    'cv.title': 'Curriculum Vitae',
     'journey.first': 'Academic',
     'journey.second': 'Journey',
     'byNumbers': 'By the Numbers.',
     'contactLabel': 'Contact:',
     'selectedPublications': 'Selected publications:',
     'allPublications': 'All publications — Google Scholar',
-    'viewAllReviews': 'View all reviews',
+    'memberships': 'Memberships:',
     'contact.workplace': 'Practice',
     'contact.address': 'Address',
     'contact.phone': 'Appointment line',

@@ -9,6 +9,16 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Kaldırılan / adı değişen sayfaların eski adresleri (paylaşılmış bağlantılar boşa düşmesin)
+  routeRules: {
+    '/yayinlar': { redirect: { to: '/akademik', statusCode: 301 } },
+    '/yaklasim': { redirect: { to: '/', statusCode: 301 } },
+    '/yorumlar': { redirect: { to: '/', statusCode: 301 } },
+    '/en/publications': { redirect: { to: '/en/academic', statusCode: 301 } },
+    '/en/approach': { redirect: { to: '/en', statusCode: 301 } },
+    '/en/reviews': { redirect: { to: '/en', statusCode: 301 } }
+  },
+
   nitro: {
     vercel: {
       config: {

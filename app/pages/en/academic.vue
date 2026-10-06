@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Türkçe (/yayinlar) ve İngilizce (/en/publications) sayfalar aynı içeriği kullanır; dil adresten belirlenir.
+// Türkçe (/akademik) ve İngilizce (/en/academic) sayfalar aynı içeriği kullanır; dil adresten belirlenir.
 // Sayfa başlığı, admin panelindeki "publications" bölümünün "üst etiket" alanından gelir.
 const section = await useSection('publications', { eyebrow: 'Yayınlar & Akademik Çalışmalar', title: 'Bilimsel katkılar' })
 const { t } = useLang()
