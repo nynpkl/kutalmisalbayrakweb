@@ -13,7 +13,7 @@ const { t, pathTo } = useLang()
       <ol class="journey__list">
         <li v-for="item in about.timeline" :key="item.year + item.text" class="journey__row">
           <span class="journey__dot" aria-hidden="true" />
-          <span class="journey__year">
+          <span class="journey__year t-result-text">
             <span v-for="(part, j) in item.year.split('–')" :key="j" class="journey__year-part">{{ part }}{{ j < item.year.split('–').length - 1 ? '–' : '' }}</span>
           </span>
           <div class="journey__card">
@@ -75,9 +75,6 @@ const { t, pathTo } = useLang()
   padding-top: 8px;
   padding-right: 22px;
   text-align: right;
-  font-size: 17px;
-  line-height: 22px;
-  letter-spacing: 0.04em;
   color: rgba(0, 0, 0, 0.6);
 }
 

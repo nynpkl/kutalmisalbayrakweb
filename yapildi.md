@@ -209,6 +209,12 @@ profdregemenaltan.com'daki menü yapısı örnek alındı (EN: About · Expertis
 - **Kaldırılanlar:** Yaklaşım ve Yorumlar sayfaları ile menü başlıkları. Ana sayfadaki 4 adımlı Yaklaşım bölümü korunuyor. Yorumlar içeriği sitede gösterilmiyor (admin sekmesi "(gizli)" olarak duruyor; footer'daki Doktor Takvimi bağlantısı buradan okunuyor).
 - **Eski adresler:** `/yayinlar` → `/akademik`, `/yaklasim` ve `/yorumlar` → ana sayfa (İngilizceleri de) kalıcı (301) yönlendirme (`nuxt.config.ts` → `routeRules`).
 
+## 18. Yazı boyutları eşitlendi
+
+Kullanıcı isteği: yazılar küçülmesin, başlıkların altındaki metinler de ana metinle aynı boyutta olsun; kalın/ince dengesi korunsun (yeşil kalın başlıklar kalıyor — önce denenen "her şey ince" değişikliği kullanıcı beğenmediği için geri alındı).
+- İçerikteki tüm metinler (açıklamalar, listeler, tedavi listesi, zaman çizelgesi metinleri ve yılları, yayın başlıkları ve dergi adları, iletişim bilgileri) ana paragrafla aynı boyutta: masaüstünde 25 px, mobilde 20,5 px (`main.css`: `.t-text`, `.t-list`, `.t-result-text` artık `.t-text-big` ile aynı). Önceden 16 / 17 / 17,25 / 18 px'lik küçük metinler vardı.
+- Listelerdeki yeşil noktaların konumu büyüyen yazıya göre ayarlandı.
+
 ## Sonraki adımlar (kullanıcıyla birlikte yapılacak)
 
 - [ ] Tedaviler sayfasındaki geçici listeyi doktorun metinleriyle değiştirmek (admin → Tedaviler).
