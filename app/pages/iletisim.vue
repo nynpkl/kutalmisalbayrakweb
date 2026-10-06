@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Türkçe (/iletisim) ve İngilizce (/en/contact) sayfalar aynı içeriği kullanır; dil adresten belirlenir.
-// Büyük başlık ve yeşil alt çizgili sayfa adı, admin panelindeki "contact" bölümünün başlık / üst başlık alanlarından gelir.
+// Sayfa başlığı, admin panelindeki "contact" bölümünün "üst etiket" alanından gelir.
 const section = await useSection('contact', { eyebrow: 'İletişim', title: 'Randevu ve iletişim bilgileri' })
 const { t } = useLang()
 
@@ -9,7 +9,7 @@ useHead({ title: () => `${section.value.eyebrow} | ${t('doctor')}` })
 
 <template>
   <div>
-    <PageHero :lines="[section.title]" :label="section.eyebrow" />
+    <PageTitle :title="section.eyebrow" />
     <div class="page-body">
       <ContactSection />
     </div>

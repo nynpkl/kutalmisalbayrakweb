@@ -23,9 +23,33 @@ useHead({
   <div>
     <IntroLoader />
     <TheHeader />
+    <!-- Tablet/mobilde isim logosu (masaüstünde sabit üst bölümün içinde) -->
+    <div class="mobile-wordmark">
+      <SiteWordmark />
+    </div>
     <main>
       <slot />
     </main>
     <TheFooter />
   </div>
 </template>
+
+<style scoped>
+.mobile-wordmark {
+  display: flex;
+  justify-content: center;
+  padding-top: 92px;
+}
+
+@media (min-width: 744px) {
+  .mobile-wordmark {
+    padding-top: 40px;
+  }
+}
+
+@media (min-width: 1170px) {
+  .mobile-wordmark {
+    display: none;
+  }
+}
+</style>

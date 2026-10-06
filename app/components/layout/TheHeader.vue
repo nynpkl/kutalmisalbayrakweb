@@ -1,18 +1,14 @@
 <script setup lang="ts">
-// Referanstaki sabit öğeler: sağ üstte amblem (mobilde solda), sayfanın üst kısmındaki menü
-// kaydırılıp ekrandan çıkınca yukarıdan kayarak gelen sabit menü, mobilde hamburger + tam ekran menü.
+// Masaüstünde sabit, iki satırlı üst bölüm: üstte TR/EN · isim logosu · amblem, altında menü.
+// Tablet/mobilde amblem + hamburger sabit; isim logosu sayfanın en üstünde (layout'ta), menü tam ekran açılır.
 const route = useRoute()
 const { t, nav, pathTo } = useLang()
 
-const showFixedNav = ref(false)
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
 
 function update() {
   isScrolled.value = window.scrollY > 10
-  // Sayfa başlığının altındaki menü ekranın üst kısmına ulaştığında sabit menüyü göster
-  const heroNav = document.querySelector('.page-hero__nav')
-  showFixedNav.value = heroNav ? heroNav.getBoundingClientRect().top < 60 : window.scrollY > 120
 }
 
 watch(isMenuOpen, (open) => {
@@ -23,7 +19,6 @@ watch(
   () => route.fullPath,
   () => {
     isMenuOpen.value = false
-    // Sayfa geçişi (out-in) bittikten sonra yeniden hesapla
     setTimeout(update, 800)
   }
 )
@@ -43,9 +38,10 @@ onUnmounted(() => {
 
 <template>
   <header class="site-header">
-    <!-- Kaydırınca yukarıdan gelen sabit menü (masaüstü) -->
-    <div class="fixed-nav" :class="{ 'fixed-nav--visible': showFixedNav }">
-      <MainNav />
+    <!-- Sabit üst bölüm (masaüstü): üst satırda isim logosu, alt satırda menü -->
+    <div class="top-bar">
+      <SiteWordmark class="top-bar__wordmark" />
+      <MainNav class="top-bar__nav" />
     </div>
 
     <!-- Tablet/mobilde amblem ve menü düğmesinin arkasında, altından geçen metni gizleyen beyaz şerit -->
@@ -89,34 +85,39 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* ---------- Sabit menü ---------- */
-.fixed-nav {
+/* ---------- Sabit üst bölüm (masaüstü) ---------- */
+.top-bar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, #fff 0, #fff 82.5%, hsla(0, 0%, 100%, 0));
-  transform: translate3d(0, -100%, 0);
-  transition: transform var(--ease);
+  height: var(--header-h);
+  background: linear-gradient(180deg, #fff 0, #fff 88%, hsla(0, 0%, 100%, 0));
 }
 
-.fixed-nav--visible {
-  transform: translate3d(0, 0, 0);
+.top-bar__wordmark {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.top-bar__nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
 }
 
 @media (min-width: 1440px) {
-  .fixed-nav {
-    height: 120px;
+  .top-bar__wordmark {
+    top: 44px;
   }
 }
 
 @media (max-width: 1169px) {
-  .fixed-nav {
+  .top-bar {
     display: none;
   }
 }

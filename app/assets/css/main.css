@@ -70,6 +70,22 @@ p {
   --list: min(1062px, 88.75vw);
 
   --ease: 0.375s;
+
+  /* Sabit üst bölümün yüksekliği (masaüstünde iki satır: isim logosu + menü). Tablet/mobilde sabit
+     üst bölüm yok; isim logosu sayfanın en üstünde akış içinde yer alır. */
+  --header-h: 0px;
+}
+
+@media (min-width: 1170px) {
+  :root {
+    --header-h: 172px;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --header-h: 182px;
+  }
 }
 
 body {
@@ -242,14 +258,19 @@ body {
   text-align: center;
 }
 
-/* Başlık alanından sonraki içerik */
+/* Sabit üst bölümün altından başla */
+main {
+  padding-top: var(--header-h);
+}
+
+/* Sayfa başlığından sonraki içerik */
 .page-body {
-  padding-top: 110px;
+  padding-top: 70px;
 }
 
 @media (min-width: 1170px) {
   .page-body {
-    padding-top: 150px;
+    padding-top: 90px;
   }
 }
 

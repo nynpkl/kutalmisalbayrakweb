@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Türkçe (/yaklasim) ve İngilizce (/en/approach) sayfalar aynı içeriği kullanır; dil adresten belirlenir.
-// Büyük başlık ve yeşil alt çizgili sayfa adı, admin panelindeki "approach" bölümünün başlık / üst başlık alanlarından gelir.
+// Sayfa başlığı, admin panelindeki "approach" bölümünün "üst etiket" alanından gelir.
 const section = await useSection('approach', { eyebrow: 'Yaklaşımım', title: 'Şeffaf, sakin ve hasta odaklı bir süreç' })
 const { t } = useLang()
 
@@ -9,7 +9,7 @@ useHead({ title: () => `${section.value.eyebrow} | ${t('doctor')}` })
 
 <template>
   <div>
-    <PageHero :lines="[section.title]" :label="section.eyebrow" />
+    <PageTitle :title="section.eyebrow" />
     <div class="page-body">
       <ApproachSection :show-title="false" />
     </div>

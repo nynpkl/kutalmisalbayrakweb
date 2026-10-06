@@ -192,6 +192,13 @@ Site iki dilli hale getirildi; site Türkçe açılır, sol üstteki **TR / EN**
 
 - **İngilizce logo:** İngilizce sayfalarda isim logosu "ASSOC. PROF. KUTALMIŞ ALBAYRAK" yazıyor. Font tahminiyle yeniden yazmak yerine, orijinal logodaki harflerin kendisi kullanıldı: "DR. KUTALMIŞ ALBAYRAK", A, O, R ve nokta birebir; S ve C, Ş ve Ç'nin çengelsiz halinden; logoda bulunmayan P, R'nin bacağı silinerek; F, L'nin dikey çevrilmesi ve orta kol eklenmesiyle aynı harf setinden türetildi. Harf/kelime aralıkları orijinaldeki gibi; çizgi isim uzunluğuna göre uzatıldı, "SHOULDER · ELBOW · SPORTS SURGERY" satırı birebir. Üretilen dosyalar: `public/images/logo/ka-wordmark-en-{black,white}.png`, `ka-lockup-en-{black,white}.png` ve yüksek çözünürlüklü `public/images/KA_logo_en_black_on_white_highres.png`, `KA_logo_en_white_on_dark_highres.png`. Sitede harf boyu Türkçeyle aynı kalsın diye logo genişliği oranında büyütülüyor (`PageHero.vue`, `--wordmark-ratio`).
 
+## 16. Menü üste alındı, alt sayfalardaki tam ekran başlıklar kaldırıldı
+
+- **Sabit üst bölüm (masaüstü, `TheHeader.vue`):** İki satır — üstte TR/EN · isim logosu · KA amblemi, altında ana menü. Sayfa kaydırılsa da yerinde kalır (önceki "ekranın altında menü + kaydırınca yukarıdan gelen menü" düzeni kaldırıldı). Yüksekliği `--header-h` değişkeninde (`main.css`); içerik bu boşluğun altından başlar.
+- **Tablet/mobil:** Amblem ve menü düğmesi sabit; isim logosu sayfanın en üstünde (`layouts/default.vue`, `SiteWordmark.vue`). Dar ekranda logo ile düğmeler yan yana konursa logo okunamayacak kadar küçüleceği için bu düzen seçildi.
+- **Alt sayfalar:** Tam ekran slogan başlığı ve aşağı ok kaldırıldı; içerik, üst bölümün hemen altında sade bir sayfa başlığıyla ("Hakkımda", "Uzmanlık Alanları" …) başlar (`PageTitle.vue`, admin panelindeki "üst etiket" alanından). Slogan cümleleri admin panelinde duruyor ama alt sayfalarda gösterilmiyor.
+- **Ana sayfa:** Tam ekran slogan ("Hareketin özgürlüğü, güvenilir ellerde.") şimdilik korunuyor; yalnızca altındaki menü kaldırıldı (`PageHero.vue` artık yalnızca ana sayfa için).
+
 ## Sonraki adımlar (kullanıcıyla birlikte yapılacak)
 
 - [ ] Doktorun kendisiyle teyit: biyografideki tarihler/kurumlar, üyelikler ve yayın listesinin güncelliği.
